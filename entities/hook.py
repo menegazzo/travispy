@@ -3,14 +3,15 @@ from ._entity import Entity
 
 
 #===================================================================================================
-# Account
+# Hook
 #===================================================================================================
-class Account(Entity):
+class Hook(Entity):
 
     __slots__ = [
         'name',
-        'login',
-        'type',
-        'repos_count',
-        'subscribed',
+        'description',
+        'owner_name',
+        'active',
+        'private',
+        'admin',
     ]

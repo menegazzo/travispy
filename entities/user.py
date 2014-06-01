@@ -3,14 +3,17 @@ from ._entity import Entity
 
 
 #===================================================================================================
-# Account
+# User
 #===================================================================================================
-class Account(Entity):
+class User(Entity):
 
     __slots__ = [
-        'name',
         'login',
-        'type',
-        'repos_count',
-        'subscribed',
+        'name',
+        'email',
+        'gravatar_id',
+        'is_syncing',
+        'synced_at',
+        'correct_scopes',
+        'channels',
     ]

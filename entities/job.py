@@ -3,21 +3,22 @@ from ._restartable import Restartable
 
 
 #===================================================================================================
-# Build
+# Job
 #===================================================================================================
-class Build(Restartable):
+class Job(Restartable):
 
     __slots__ = [
+        'build_id',
         'repository_id',
         'commit_id',
+        'log_id',
         'number',
-        'pull_request',
-        'pull_request_title',
-        'pull_request_number',
         'config',
         'state',
         'started_at',
         'finished_at',
         'duration',
-        'job_ids',
+        'queue',
+        'allow_failure',
+        'annotation_ids',
     ]

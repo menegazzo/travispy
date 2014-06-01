@@ -1,4 +1,11 @@
 from entities.account import Account
+from entities.broadcast import Broadcast
+from entities.build import Build
+from entities.hook import Hook
+from entities.job import Job
+from entities.log import Log
+from entities.repo import Repo
+from entities.session import Session
 import requests
 
 
@@ -49,8 +56,7 @@ class TravisPy:
             URI where Travis-CI is running on.
             You may use the constants PUBLIC, PRIVATE or ENTERPRISE template.
         '''
-        self._uri = uri
-        self._session = session = requests.Session()
+        self._session = session = Session(uri)
         session.headers.update(self._HEADERS)
         if token is not None:
             session.headers['Authorization'] = 'token %s' % token
@@ -67,23 +73,7 @@ class TravisPy:
 
     # Accounts -------------------------------------------------------------------------------------
     def accounts(self, all=False):
-        response = self._session.get(self._uri + '/accounts', params={
-            'all': all,
-        })
-
-        result = []
-
-        contents = response.json()
-        accounts = contents.get('accounts', [])
-        for i_account in accounts:
-
-            account = Account()
-            for key, value in i_account.iteritems():
-                setattr(account, key, value)
-                
-            result.append(account)
-
-        return result
+        return self._session.find_many(Account, all=all)
 
 
     def account(self, account_id):
@@ -94,110 +84,58 @@ class TravisPy:
 
     # Broadcasts -----------------------------------------------------------------------------------
     def broadcasts(self):
-        pass
+        return self._session.find_many(Broadcast)
 
 
     # Builds ---------------------------------------------------------------------------------------
-    def builds(self):
-        pass
+    def builds(self, **kwargs):
+        exclusive_required_parameters = ['ids', 'repository_id', 'slug']
+        for param in exclusive_required_parameters:
+            if param in kwargs:
+                break
+        else:
+            raise RuntimeError('You have to supply either "ids", "repository_id" or "slug".')
+
+        return self._session.find_many(Build, **kwargs)
 
 
     def build(self, build_id):
-        pass
-
-
-    def cancel(self, build_id):
-        pass
-
-
-    def restart(self, build_id):
-        pass
+        return self._session.find_one(Build, build_id)
 
 
     # Hooks ----------------------------------------------------------------------------------------
     def hooks(self):
-        pass
-
-
-    def hook(self, hook_id):
-        pass
+        return self._session.find_many(Hook)
 
 
     # Jobs -----------------------------------------------------------------------------------------
-    def jobs(self):
-        pass
+    def jobs(self, **kwargs):
+        exclusive_required_parameters = ['ids', 'repository_id', 'slug']
+        provided_required_parameters = set(
+            param
+            for param in exclusive_required_parameters
+            if param in kwargs
+        )
+
+        if len(provided_required_parameters) != 1:
+            raise RuntimeError('You need to provide exactly one of the following parameters: "ids", "state" or "queue".')
+
+        return self._session.find_many(Job, **kwargs)
 
 
     def job(self, job_id):
-        pass
+        return self._session.find_one(Job, job_id)
 
 
     # Log ------------------------------------------------------------------------------------------
     def log(self, log_id):
-        return self.artifact(log_id)
-
-
-    def artifact(self, artifact_id):
-        pass
+        return self._session.find_one(Log, log_id)
 
 
     # Repositories ---------------------------------------------------------------------------------
     def repos(self, **kwargs):
-        pass
+        return self._session.find_many(Repo, **kwargs)
 
 
     def repo(self, id_or_slug):
-        pass
-
-
-#
-# # # Authentication -----------------------------------------------------------------------------------
-# # response = requests.get(host + '/users', headers=headers)
-# # print response.json()
-# #
-# ## GitHub ------------------------------------------------------------------------------------------
-# response = requests.post(PUBLIC + '/auth/github', headers=TravisPy._HEADERS, params={
-#     "github_token": "9f6cce04ce8fee42519c256fe903836afc262833",
-# })
-# print response.json()
-#
-# headers = {'Authorization': 'token IVHjLjs8ni10wRF2YLuV5w'}
-# headers.update(TravisPy._HEADERS)
-# response = requests.get(PUBLIC + '/users', headers=headers)
-# print response.json()
-# #
-# # # Entities -----------------------------------------------------------------------------------------
-# #
-# # ## Accounts ----------------------------------------------------------------------------------------
-# # response = requests.get(host + '/accounts', headers=headers)
-# # print response.json()
-# #
-# # response = requests.get(host + '/accounts', headers=headers, params={'all': 'true'})
-# # print response.json()
-# #
-# # ## Branches ----------------------------------------------------------------------------------------
-# # response = requests.get(host + '/repos/%s/branches' % 'menegazzo/watchsubs', headers=headers)
-# # print response.json()
-# #
-# # response = requests.get(host + '/repos/%d/branches' % 2298605, headers=headers)
-# # print response.json()
-# #
-# # response = requests.get(host + '/repos/%s/branches/master' % 'menegazzo/watchsubs', headers=headers)
-# # print response.json()
-# #
-# # response = requests.get(host + '/repos/%d/branches/master' % 2298605, headers=headers)
-# # print response.json()
-# #
-# # ## Broadcasts --------------------------------------------------------------------------------------
-# # response = requests.get(host + '/broadcasts', headers=headers)
-# # print response.json()
-# #
-# # ## Builds ------------------------------------------------------------------------------------------
-# # response = requests.get(host + '/repos/%s/builds' % 'menegazzo/watchsubs', headers=headers)
-# # print response.json()
-# #
-# # response = requests.get(host + '/builds', headers=headers, params={
-# #     'slug': 'menegazzo/watchsubs',
-# #     'after_number': 50,
-# # })
-# # print response.json()
+        return self._session.find_one(Repo, id_or_slug)
