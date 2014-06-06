@@ -6,6 +6,7 @@ from entities.job import Job
 from entities.log import Log
 from entities.repo import Repo
 from entities.session import Session
+from entities.user import User
 import requests
 
 
@@ -139,3 +140,7 @@ class TravisPy:
 
     def repo(self, id_or_slug):
         return self._session.find_one(Repo, id_or_slug)
+
+    # Users ----------------------------------------------------------------------------------------
+    def user(self):
+        return self._session.find_one(User, '')

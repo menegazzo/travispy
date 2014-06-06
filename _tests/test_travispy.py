@@ -1,5 +1,6 @@
 from travispy import TravisPy
 import pytest
+from entities.user import User
 
 
 
@@ -21,7 +22,7 @@ class Test:
         assert account.name == 'Fabio Menegazzo'
         assert account.login == 'menegazzo'
         assert account.type == 'user'
-        assert account.repos_count == 6
+        assert account.repos_count == 7
         assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
 
         assert accounts[1].id == 17781
@@ -29,7 +30,7 @@ class Test:
         assert account.name == 'ESSS'
         assert account.login == 'ESSS'
         assert account.type == 'organization'
-        assert account.repos_count == 84
+        assert account.repos_count == 85
         assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
 
         account = self._travis.account(123)
@@ -90,7 +91,7 @@ class Test:
 
     def test_hooks(self):
         hooks = self._travis.hooks()
-        assert len(hooks) == 6
+        assert len(hooks) == 7
 
 
     def test_jobs(self):
@@ -136,7 +137,7 @@ class Test:
         log = self._travis.log(15928905)
         assert log.id == 15928905
         assert log.job_id == 25718104
-        assert log.body == '\n\nDone: Job Cancelled\n'
+        assert hasattr(log, 'body')
 
 
     def test_repos(self):
@@ -162,3 +163,12 @@ class Test:
         assert hasattr(repo, 'last_build_started_at')
         assert hasattr(repo, 'last_build_finished_at')
         assert repo.id == self._travis.repo(repos[0].slug).id
+
+
+    def test_user(self):
+        user = self._travis.user()
+        assert isinstance(user, User) == True
+
+        assert user.login == 'menegazzo'
+        assert user.name == 'Fabio Menegazzo'
+        assert user.email == 'menegazzo@gmail.com'
