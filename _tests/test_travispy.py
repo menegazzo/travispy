@@ -146,10 +146,10 @@ class Test:
         assert len(repos) == 25
 
         repos = self._travis.repos(member='menegazzo')
-        assert len(repos) == 4
+        assert len(repos) == 5
 
         repos = self._travis.repos(owner_name='menegazzo')
-        assert len(repos) == 2
+        assert len(repos) == 3
 
         assert repos[0].id == 2298605
         repo = self._travis.repo(repos[0].id)
