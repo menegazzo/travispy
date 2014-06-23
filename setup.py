@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 description = 'Python API for Travis CI.'
 long_description = 'Python API for Travis CI. It is based on Travis API documentation and also on official Ruby API.'
@@ -6,7 +6,7 @@ long_description = 'Python API for Travis CI. It is based on Travis API document
 setup(
     name='travispy',
     version='0.1.0',
-    packages=[],
+    packages=find_packages(),
     py_modules=['travispy'],
     install_requires=[x.strip() for x in open('requirements.txt')],
 
