@@ -1,5 +1,5 @@
-from entities.user import User
 from travispy import TravisPy
+from travispy.entities import User
 import os
 import pytest
 

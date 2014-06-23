@@ -1,12 +1,4 @@
-from entities.account import Account
-from entities.broadcast import Broadcast
-from entities.build import Build
-from entities.hook import Hook
-from entities.job import Job
-from entities.log import Log
-from entities.repo import Repo
-from entities.session import Session
-from entities.user import User
+from .entities import Account, Broadcast, Build, Hook, Job, Log, Repo, Session, User
 import requests
 
 
