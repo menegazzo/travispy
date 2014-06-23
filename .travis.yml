@@ -1,0 +1,7 @@
+language: python
+python:
+  - "2.7"
+env: TRAVISPY_GITHUB_ACCESS_TOKEN=191cf605b738a3c24737efb888c1732673e8922b
+install:
+  - "pip install -r requirements.txt"
+script: py.test

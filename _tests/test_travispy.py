@@ -1,6 +1,7 @@
-from travispy import TravisPy
-import pytest
 from entities.user import User
+from travispy import TravisPy
+import os
+import pytest
 
 
 
@@ -10,7 +11,7 @@ from entities.user import User
 class Test:
 
     def setup_method(self, method):
-        self._travis = TravisPy.github_auth('9f6cce04ce8fee42519c256fe903836afc262833')
+        self._travis = TravisPy.github_auth(os.environ['TRAVISPY_GITHUB_ACCESS_TOKEN'])
 
 
     def test_accounts(self):
@@ -30,7 +31,7 @@ class Test:
         assert account.name == 'ESSS'
         assert account.login == 'ESSS'
         assert account.type == 'organization'
-        assert account.repos_count == 85
+        assert hasattr(account, 'repos_count')
         assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
 
         account = self._travis.account(123)
