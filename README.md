@@ -2,7 +2,7 @@
 
 TravisPy is a Python API for Travis CI.
 
-[![ci](http://img.shields.io/travis/menegazzo/watchsubs.svg?style=flat)](https://travis-ci.org/menegazzo/watchsubs)
+[![ci](http://img.shields.io/travis/menegazzo/travispy.svg?style=flat)](https://travis-ci.org/menegazzo/travispy)
 
 ## User guide
 
