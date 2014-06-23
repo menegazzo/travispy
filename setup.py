@@ -7,7 +7,6 @@ setup(
     name='travispy',
     version='0.1.0',
     packages=find_packages(),
-    py_modules=['travispy'],
     install_requires=[x.strip() for x in open('requirements.txt')],
 
     # metadata for upload to PyPI
