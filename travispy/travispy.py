@@ -60,8 +60,9 @@ class TravisPy:
         response = requests.post(uri + '/auth/github', headers=cls._HEADERS, params={
             "github_token": token,
         })
-        access_token = response.json()['access_token']
-        return TravisPy(access_token, uri)
+        if response.status_code == 200:
+            access_token = response.json()['access_token']
+            return TravisPy(access_token, uri)
 
 
     # Accounts -------------------------------------------------------------------------------------

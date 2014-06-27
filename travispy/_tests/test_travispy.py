@@ -14,6 +14,10 @@ class Test:
         self._travis = TravisPy.github_auth(os.environ['TRAVISPY_GITHUB_ACCESS_TOKEN'])
 
 
+    def test_github_auth(self):
+        assert TravisPy.github_auth('invalid') is None
+
+
     def test_accounts(self):
         accounts = self._travis.accounts()
         assert len(accounts) == 2
