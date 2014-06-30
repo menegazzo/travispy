@@ -6,10 +6,9 @@ python:
 - '3.3'
 - '3.4'
 - 'pypy'
-install:
-- pip install -r requirements.txt
-- pip install -r requirements_for_testing.txt
-script: py.test
+script:
+- python setup.py develop
+- py.test
 env:
   global:
     secure: hZ2juFPK8PjTDXm9rwaFOSMTCv1zqphbt7hO0FXvOGW6SBswSSdHuai+ny6SYbScWml8RrfabQxVLTbOaKIr1rIjAaY/qVhLRjBP6XcubgK05tbXE0gwNoQpAExaGQY+vrEL2RjB7782O/aXUg4b0iF2j3PN9KzdN2Gx2zUSjAw=
