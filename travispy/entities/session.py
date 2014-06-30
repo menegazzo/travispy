@@ -19,7 +19,7 @@ class Session(requests.Session):
             contents = response.json()
             info = contents.get(entity_class.one(), {})
             entity = entity_class(self)
-            for key, value in info.iteritems():
+            for key, value in info.items():
                 setattr(entity, key, value)
             return entity
 
@@ -34,7 +34,7 @@ class Session(requests.Session):
             info = contents.get(command, [])
             for i in info:
                 entity = entity_class(self)
-                for key, value in i.iteritems():
+                for key, value in i.items():
                     setattr(entity, key, value)
                 result.append(entity)
 

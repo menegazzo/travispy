@@ -5,6 +5,7 @@ class Entity:
 
     __slots__ = [
         'id',
+        '_session',
     ]
 
     def __init__(self, session):

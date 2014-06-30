@@ -16,5 +16,7 @@ class Repo(Entity):
         'last_build_duration',
         'last_build_started_at',
         'last_build_finished_at',
+        'last_build_language',
         'github_language',
+        'active',
     ]

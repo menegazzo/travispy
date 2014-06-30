@@ -16,4 +16,6 @@ class User(Entity):
         'synced_at',
         'correct_scopes',
         'channels',
+        'created_at',
+        'locale',
     ]

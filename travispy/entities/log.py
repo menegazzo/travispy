@@ -10,4 +10,5 @@ class Log(Entity):
     __slots__ = [
         'job_id',
         'body',
+        'type',
     ]
