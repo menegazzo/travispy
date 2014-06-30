@@ -1,9 +1,10 @@
-from setuptools import setup, find_packages
+from setuptools import setup
+
 
 setup(
     name='TravisPy',
     version='0.1.0',
-    packages=find_packages(),
+    packages=['travispy', 'travispy.entities'],
     install_requires=[x.strip() for x in open('requirements.txt')],
 
     # metadata for upload to PyPI
@@ -20,6 +21,5 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
-
     ]
 )
