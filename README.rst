@@ -3,12 +3,12 @@ TravisPy
 
 TravisPy is a Python API for Travis CI. It follows the `official API <http://docs.travis-ci.com/api/>`_ and is implemented as similar as possible to `Ruby implementation <https://github.com/travis-ci/travis.rb#ruby-library>`_.
 
-.. image:: http://img.shields.io/pypi/v/travispy.svg?style=flat
-    :target: https://pypi.python.org/pypi/travispy
+.. image:: http://img.shields.io/pypi/v/TravisPy.svg?style=flat
+    :target: https://pypi.python.org/pypi/TravisPy
     :alt: Latest Version
 
 .. image:: http://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat
-    :target: https://pypi.python.org/pypi/travispy
+    :target: http://www.gnu.org/licenses/gpl-3.0-standalone.html
     :alt: License
 
 .. image:: http://img.shields.io/travis/menegazzo/travispy.svg?style=flat
