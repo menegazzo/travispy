@@ -18,7 +18,7 @@ class Test:
     def python_version(self):
         try:
             import __pypy__
-            return 'PyPy'
+            return 'pypy'
         except ImportError:
             import sys
             return '%d.%d' % (
