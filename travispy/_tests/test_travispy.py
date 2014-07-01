@@ -14,28 +14,46 @@ class Test:
         self._travis = TravisPy.github_auth(os.environ['TRAVISPY_GITHUB_ACCESS_TOKEN'])
 
 
+    @pytest.fixture
+    def python_version(self):
+        try:
+            import __pypy__
+            return 'PyPy'
+        except ImportError:
+            import sys
+            return '%d.%d' % (
+                sys.version_info[0],
+                sys.version_info[1],
+            )
+
+
+    @pytest.fixture
+    def repo_slug(self):
+        try:
+            import __pypy__
+            return 'travispy/on_pypy'
+        except ImportError:
+            import sys
+            return 'travispy/on_py%d%d' % (
+                sys.version_info[0],
+                sys.version_info[1],
+            )
+
+
     def test_github_auth(self):
         assert TravisPy.github_auth('invalid') is None
 
 
     def test_accounts(self):
         accounts = self._travis.accounts()
-        assert len(accounts) == 2
+        assert len(accounts) == 1
 
-        assert accounts[0].id == 72481
-        account = self._travis.account(72481)
-        assert account.name == 'Fabio Menegazzo'
-        assert account.login == 'menegazzo'
+        assert accounts[0].id == 84789
+        account = self._travis.account(84789)
+        assert account.name == 'TravisPy'
+        assert account.login == 'travispy'
         assert account.type == 'user'
-        assert account.repos_count == 7
-        assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
-
-        assert accounts[1].id == 17781
-        account = self._travis.account(17781)
-        assert account.name == 'ESSS'
-        assert account.login == 'ESSS'
-        assert account.type == 'organization'
-        assert hasattr(account, 'repos_count')
+        assert account.repos_count == 6
         assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
 
         account = self._travis.account(123)
@@ -47,19 +65,18 @@ class Test:
         assert len(broadcasts) == 0
 
 
-    def test_builds(self):
+    def test_builds(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.builds)
 
-        builds = self._travis.builds(repository_id=2298605)
-        assert len(builds) == 25
-        assert builds[0].repository_id == 2298605
-        assert builds[-1].repository_id == 2298605
+        builds = self._travis.builds(slug=repo_slug)
+        assert len(builds) == 1
 
-        build = self._travis.build(25718103) # menegazzo/watchsubs #52
-        assert build.id == 25718103
-        assert build.repository_id == 2298605
-        assert build.commit_id == 7430235
-        assert build.number == '52'
+        repo = self._travis.repo(repo_slug)
+        build_id = builds[0].id
+        build = self._travis.build(build_id)
+        assert build.id == build_id
+        assert build.repository_id == repo.id
+        assert build.number == '1'
         assert build.pull_request == False
         assert build.pull_request_title == None
         assert build.pull_request_number == None
@@ -67,28 +84,15 @@ class Test:
             '.result': 'configured',
             'os': 'linux',
             'language': 'python',
-            'python': [
-                '2.7'
-            ],
-            'before_install': [
-                'sudo apt-get install rar',
-                'sudo apt-get install unrar',
-                'sudo apt-get install python-pyside'
-            ],
-            'install': [
-                'pip install -r requirements.txt'
-            ],
-            'before_script': [
-                'export PYTHONPATH="$PYTHONPATH:/usr/lib/python2.7/dist-packages/"'
-            ],
-            'script': 'py.test',
-            'cache': 'apt',
+            'python': [python_version],
+            'script': ['py.test'],
         }
+        assert hasattr(build, 'commit_id')
         assert hasattr(build, 'state')
         assert hasattr(build, 'started_at')
         assert hasattr(build, 'finished_at')
         assert hasattr(build, 'duration')
-        assert build.job_ids == [25718104]
+        assert hasattr(build, 'job_ids')
 
         assert build.restart() == True
         assert build.cancel() == True
@@ -96,37 +100,31 @@ class Test:
 
     def test_hooks(self):
         hooks = self._travis.hooks()
-        assert len(hooks) == 7
+        assert len(hooks) == 6
 
 
-    def test_jobs(self):
-        jobs = self._travis.jobs(ids=[25718104])
+    def test_jobs(self, python_version, repo_slug):
+        repo = self._travis.repo(repo_slug)
+
+        builds = self._travis.builds(slug=repo_slug)
+        build_id = builds[0].id
+        build = self._travis.build(build_id)
+
+        jobs = self._travis.jobs(ids=build.job_ids)
         assert len(jobs) == 1
 
-        job = self._travis.job(25718104)
-        assert job.build_id == 25718103
-        assert job.repository_id == 2298605
-        assert job.commit_id == 7430235
-        assert job.log_id == 15928905
-        assert job.number == '52.1'
+        job = self._travis.job(build.job_ids[0])
+        assert job.build_id == build_id
+        assert job.repository_id == repo.id
+        assert job.number == '1.1'
         assert job.config == {
             '.result': 'configured',
             'language': 'python',
-            'python': '2.7',
-            'before_install': [
-                'sudo apt-get install rar',
-                'sudo apt-get install unrar',
-                'sudo apt-get install python-pyside'
-            ],
-            'install': [
-                'pip install -r requirements.txt'
-            ],
-            'before_script': [
-                'export PYTHONPATH="$PYTHONPATH:/usr/lib/python2.7/dist-packages/"'
-            ],
-            'script': 'py.test',
-            'cache': 'apt',
+            'python': python_version,
+            'script': ['py.test'],
         }
+        assert hasattr(job, 'commit_id')
+        assert hasattr(job, 'log_id')
         assert hasattr(job, 'state')
         assert hasattr(job, 'started_at')
         assert hasattr(job, 'finished_at')
@@ -145,35 +143,33 @@ class Test:
         assert hasattr(log, 'body')
 
 
-    def test_repos(self):
+    def test_repos(self, repo_slug):
         repos = self._travis.repos()
         assert len(repos) == 25
 
-        repos = self._travis.repos(member='menegazzo')
-        assert len(repos) == 5
+        repos = self._travis.repos(member='travispy')
+        assert len(repos) == 7
 
-        repos = self._travis.repos(owner_name='menegazzo')
-        assert len(repos) == 3
+        repos = self._travis.repos(owner_name='travispy')
+        assert len(repos) == 6
 
-        assert repos[0].id == 2298605
-        repo = self._travis.repo(repos[0].id)
-        assert repo.id == 2298605
-        assert repo.slug == 'menegazzo/watchsubs'
-        assert repo.description == 'You get the videos, it gets the subtitles.'
+        repo = self._travis.repo(repo_slug)
+        assert repo.slug == repo_slug
         assert repo.github_language == 'Python'
+        assert hasattr(repo, 'id')
+        assert hasattr(repo, 'description')
         assert hasattr(repo, 'last_build_id')
         assert hasattr(repo, 'last_build_number')
         assert hasattr(repo, 'last_build_state')
         assert hasattr(repo, 'last_build_duration')
         assert hasattr(repo, 'last_build_started_at')
         assert hasattr(repo, 'last_build_finished_at')
-        assert repo.id == self._travis.repo(repos[0].slug).id
 
 
     def test_user(self):
         user = self._travis.user()
         assert isinstance(user, User) == True
 
-        assert user.login == 'menegazzo'
-        assert user.name == 'Fabio Menegazzo'
-        assert user.email == 'menegazzo@gmail.com'
+        assert user.login == 'travispy'
+        assert user.name == 'TravisPy'
+        assert user.email == 'menegazzo+travispy@gmail.com'

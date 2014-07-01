@@ -5,10 +5,10 @@ python:
 - '3.2'
 - '3.3'
 - '3.4'
-- 'pypy'
+- pypy
 script:
 - python setup.py develop
 - py.test
 env:
   global:
-    secure: hZ2juFPK8PjTDXm9rwaFOSMTCv1zqphbt7hO0FXvOGW6SBswSSdHuai+ny6SYbScWml8RrfabQxVLTbOaKIr1rIjAaY/qVhLRjBP6XcubgK05tbXE0gwNoQpAExaGQY+vrEL2RjB7782O/aXUg4b0iF2j3PN9KzdN2Gx2zUSjAw=
+  - secure: J1xqFhA2jT8S5f5bpryopVj2AIA35eHlWDHHJSlyZKFQQHsnK+cUo3XoP1qatuv242WlKkaj8iBmsg9UcpZN0V5vN8wi5AM+6afeDyXjnmDr88KErfo03WCzWXtOKYNXZK4bx0pUP9McBXWq76GnefWRzD7fDUofZPm+oCylI9A=
