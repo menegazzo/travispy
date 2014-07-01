@@ -104,6 +104,8 @@ class Test:
 
 
     def test_jobs(self, python_version, repo_slug):
+        pytest.raises(RuntimeError, self._travis.jobs)
+
         repo = self._travis.repo(repo_slug)
 
         builds = self._travis.builds(slug=repo_slug)
@@ -170,6 +172,7 @@ class Test:
         user = self._travis.user()
         assert isinstance(user, User) == True
 
-        assert user.login == 'travispy'
-        assert user.name == 'TravisPy'
-        assert user.email == 'menegazzo+travispy@gmail.com'
+        # Accessing values using __getitem__
+        assert user['login'] == 'travispy'
+        assert user['name'] == 'TravisPy'
+        assert user['email'] == 'menegazzo+travispy@gmail.com'
