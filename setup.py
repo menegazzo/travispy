@@ -11,7 +11,7 @@ setup(
     author='Fabio Menegazzo',
     author_email='menegazzo@gmail.com',
     description='Python API for Travis CI.',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     license='GPL',
     keywords='travis ci continuous integration travisci',
     url='http://menegazzo.github.io/travispy/',
