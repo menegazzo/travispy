@@ -15,7 +15,7 @@ TravisPy is a Python API for Travis CI. It follows the `official API <http://doc
     :target: https://travis-ci.org/menegazzo/travispy
     :alt: Build status
 
-.. image:: http://img.shields.io/coveralls/wackou/travispy.svg?style=flat
+.. image:: http://img.shields.io/coveralls/menegazzo/travispy.svg?style=flat
     :target: https://coveralls.io/r/menegazzo/travispy?branch=master
     :alt: Coveralls
 
