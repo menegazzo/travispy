@@ -1,0 +1,5 @@
+[run]
+source = travispy
+
+[report]
+omit = */_tests/*

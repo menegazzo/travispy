@@ -1,3 +1,3 @@
 *.pyc
 .tox/
-TravisPy.egg-info/
+*.egg*/
