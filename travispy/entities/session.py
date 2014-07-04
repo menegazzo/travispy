@@ -6,6 +6,12 @@ import requests
 # Session
 #===================================================================================================
 class Session(requests.Session):
+    '''
+    Internet session created to perform requests to |travisci|.
+
+    :param str uri:
+        URI where session will start.
+    '''
 
     def __init__(self, uri):
         requests.Session.__init__(self)
@@ -13,6 +19,18 @@ class Session(requests.Session):
 
 
     def find_one(self, entity_class, entity_id, **kwargs):
+        '''
+        Method responsible for returning exactly one instance of the given ``entity_class``.
+
+        :type entity_class: :class:`.Entity`
+        :param entity_class:
+            Class of entity that information will be retrieved from |travisci|.
+
+        :param int entity_id:
+            The ID of the entity.
+
+        :rtype: ``entity_class`` instance
+        '''
         response = self.get(self.uri + '/%s/%s' % (entity_class.many(), str(entity_id)))
 
         if response.status_code == 200:
@@ -25,6 +43,15 @@ class Session(requests.Session):
 
 
     def find_many(self, entity_class, **kwargs):
+        '''
+        Method responsible for returning as many as possible matches for given ``entity_class``.
+
+        :type entity_class: :class:`.Entity`
+        :param entity_class:
+            Class of entity that information will be retrieved from |travisci|.
+
+        :rtype: list(``entity_class``)
+        '''
         command = entity_class.many()
         response = self.get(self.uri + '/%s' % command, params=kwargs)
 

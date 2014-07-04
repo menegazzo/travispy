@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>travispy.travispy &mdash; TravisPy 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="TravisPy 0.1.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">TravisPy 0.1.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for travispy.travispy</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">.. data:: PUBLIC</span>
+<span class="sd">    :annotation: = URI for Travis CI free service.</span>
+
+<span class="sd">.. data:: PRIVATE</span>
+<span class="sd">    :annotation: = URI for Travis CI paid service for GitHub private repositories.</span>
+
+<span class="sd">.. data:: ENTERPRISE</span>
+<span class="sd">    :annotation: = URI template for Travis CI service running under a personal domain. Usage will be</span>
+<span class="sd">                 something like ENTERPRISE % {&#39;domain&#39;: &#39;http://travis.example.com&#39;}.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">PUBLIC</span> <span class="o">=</span> <span class="s">&#39;http://api.travis-ci.org&#39;</span>
+<span class="n">PRIVATE</span> <span class="o">=</span> <span class="s">&#39;http://api.travis-ci.com&#39;</span>
+
+<span class="c"># Replace &quot;domain&quot; with the domain TravisCI is running on.</span>
+<span class="c"># ENTERPRISE % {&#39;domain&#39;: &#39;http://travis.example.com&#39;}</span>
+<span class="n">ENTERPRISE</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%(domain)s</span><span class="s">/api&#39;</span>
+
+
+<span class="kn">from</span> <span class="nn">.entities</span> <span class="kn">import</span> <span class="n">Account</span><span class="p">,</span> <span class="n">Broadcast</span><span class="p">,</span> <span class="n">Build</span><span class="p">,</span> <span class="n">Hook</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">Log</span><span class="p">,</span> <span class="n">Repo</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">User</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+
+<span class="c">#===================================================================================================</span>
+<span class="c"># TravisPy</span>
+<span class="c">#===================================================================================================</span>
+<div class="viewcode-block" id="TravisPy"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy">[docs]</a><span class="k">class</span> <span class="nc">TravisPy</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Instances of this class are responsible for comunicating with |travisci|, sending requests and</span>
+<span class="sd">    handling responses properly. You can create as much instances as you want since each one will</span>
+<span class="sd">    create a separated session.</span>
+
+<span class="sd">    :type token: str | None</span>
+<span class="sd">    :param token:</span>
+<span class="sd">        |travisci| token linked to your |github| account.</span>
+
+<span class="sd">        Even if you have a public repository, some information are related to your user account</span>
+<span class="sd">        and not the repository itself so if token is not provided an error will be returned.</span>
+
+<span class="sd">        Required for private and enterprise repositories to access any information.</span>
+
+<span class="sd">    :type uri: :data:`PUBLIC` | :data:`PRIVATE` | :data:`ENTERPRISE` | str</span>
+<span class="sd">    :param uri:</span>
+<span class="sd">        URI where Travis CI service is running.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        Do not confuse ``token`` with the one found on your profile page.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_HEADERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s">&#39;TravisPy&#39;</span><span class="p">,</span>
+        <span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/vnd.travis-ci.2+json&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">PUBLIC</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_HEADERS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;token </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">token</span>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="TravisPy.github_auth"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.github_auth">[docs]</a>    <span class="k">def</span> <span class="nf">github_auth</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">PUBLIC</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param str token:</span>
+<span class="sd">            GitHub access token.</span>
+
+<span class="sd">        :param uri:</span>
+<span class="sd">            See :meth:`__init__`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">uri</span> <span class="o">+</span> <span class="s">&#39;/auth/github&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">_HEADERS</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">&quot;github_token&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">access_token</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s">&#39;access_token&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">TravisPy</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">uri</span><span class="p">)</span>
+
+
+    <span class="c"># Accounts -------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.accounts"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.accounts">[docs]</a>    <span class="k">def</span> <span class="nf">accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param bool all:</span>
+<span class="sd">            Whether or not to include accounts the user does not have admin access to.</span>
+
+<span class="sd">        :rtype: list(:class:`.Account`)</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            Information of all accounts that the user might have access.This is usually the account</span>
+<span class="sd">            corresponding to the user directly and one account per |github| organization.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This request always needs to be authenticated.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Account</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="nb">all</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TravisPy.account"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.account">[docs]</a>    <span class="k">def</span> <span class="nf">account</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">account_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param int account_id:</span>
+<span class="sd">            ID of the account to obtain information.</span>
+
+<span class="sd">        :rtype: :class:`.Account`</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This request always needs to be authenticated.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">account</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">accounts</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">account</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">account_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">account</span>
+
+
+    <span class="c"># Broadcasts -----------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.broadcasts"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.broadcasts">[docs]</a>    <span class="k">def</span> <span class="nf">broadcasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :rtype: list(:class:`.Broadcast`)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This request always needs to be authenticated.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Broadcast</span><span class="p">)</span>
+
+
+    <span class="c"># Builds ---------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.builds"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.builds">[docs]</a>    <span class="k">def</span> <span class="nf">builds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :keyword list(int) ids:</span>
+<span class="sd">            List of build ids to fetch.</span>
+
+<span class="sd">        :keyword int repository_id:</span>
+<span class="sd">            Repository id the build belongs to.</span>
+
+<span class="sd">        :keyword str slug:</span>
+<span class="sd">            Repository slug the build belongs to.</span>
+
+<span class="sd">        :keyword str number:</span>
+<span class="sd">            Filter by build number, requires ``slug`` or ``repository_id``.</span>
+
+<span class="sd">        :keyword str after_number:</span>
+<span class="sd">            List build after a given build number (use for pagination), requires ``slug`` or</span>
+<span class="sd">            ``repository_id``.</span>
+
+<span class="sd">        :keyword str event_type:</span>
+<span class="sd">            Limit build to given event type (``push`` or ``pull_request``).</span>
+
+<span class="sd">        :rtype: list(:class:`.Build`)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            You have to supply either ``ids``, ``repository_id`` or ``slug``.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">exclusive_required_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ids&#39;</span><span class="p">,</span> <span class="s">&#39;repository_id&#39;</span><span class="p">,</span> <span class="s">&#39;slug&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">exclusive_required_parameters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;You have to supply either &quot;ids&quot;, &quot;repository_id&quot; or &quot;slug&quot;.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Build</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TravisPy.build"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param int build_id:</span>
+<span class="sd">            ID of the build to obtain information.</span>
+
+<span class="sd">        :rtype: :class:`.Build`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">Build</span><span class="p">,</span> <span class="n">build_id</span><span class="p">)</span>
+
+
+    <span class="c"># Hooks ----------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.hooks"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.hooks">[docs]</a>    <span class="k">def</span> <span class="nf">hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :rtype: list(:class:`.Hook`)</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            Returns list of existing hooks that user have access.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This request always needs to be authenticated.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Hook</span><span class="p">)</span>
+
+
+    <span class="c"># Jobs -----------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.jobs"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.jobs">[docs]</a>    <span class="k">def</span> <span class="nf">jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :keyword list(int) ids:</span>
+<span class="sd">            List of jobs IDs.</span>
+
+<span class="sd">        :keyword str state:</span>
+<span class="sd">            Job state to filter by. Possible values are ``passed``, ``canceled``, ``failed`` and</span>
+<span class="sd">            ``errored``.</span>
+
+<span class="sd">        :keyword str queue:</span>
+<span class="sd">            Job queue to filter by.</span>
+
+<span class="sd">        :rtype: list(:class:`.Job`)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            You need to provide exactly one of the above parameters. If you provide ``state`` or</span>
+<span class="sd">            ``queue``, a maximum of 250 jobs will be returned.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">exclusive_required_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ids&#39;</span><span class="p">,</span> <span class="s">&#39;state&#39;</span><span class="p">,</span> <span class="s">&#39;queue&#39;</span><span class="p">]</span>
+        <span class="n">provided_required_parameters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">param</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">exclusive_required_parameters</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">provided_required_parameters</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;You need to provide exactly one of the following parameters: &quot;ids&quot;, &quot;state&quot; or &quot;queue&quot;.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TravisPy.job"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.job">[docs]</a>    <span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param int job_id:</span>
+<span class="sd">            ID of the job to obtain information.</span>
+
+<span class="sd">        :rtype: :class:`.Job`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="n">job_id</span><span class="p">)</span>
+
+
+    <span class="c"># Log ------------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.log"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param int log_id:</span>
+<span class="sd">            ID of the log to obtain information.</span>
+
+<span class="sd">        :rtype: :class:`.Log`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">Log</span><span class="p">,</span> <span class="n">log_id</span><span class="p">)</span>
+
+
+    <span class="c"># Repositories ---------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.repos"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.repos">[docs]</a>    <span class="k">def</span> <span class="nf">repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :keyword list(int) ids:</span>
+<span class="sd">            List of repository ids to fetch, cannot be combined with other parameters.</span>
+
+<span class="sd">        :keyword str member:</span>
+<span class="sd">            Filter by user that has access to it (|github| login).</span>
+
+<span class="sd">        :keyword str owner_name:</span>
+<span class="sd">            Filter by owner name (first segment of slug).</span>
+
+<span class="sd">        :keyword str slug:</span>
+<span class="sd">            Filter by slug.</span>
+
+<span class="sd">        :keyword str search:</span>
+<span class="sd">            Filter by search term.</span>
+
+<span class="sd">        :keyword bool active:</span>
+<span class="sd">            If ``True``, will only return repositories that are enabled. Default is ``False``.</span>
+
+<span class="sd">        :rtype: list(:class:`.Repo`)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            If no parameters are given, a list of repositories with recent activity is returned.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Repo</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TravisPy.repo"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.repo">[docs]</a>    <span class="k">def</span> <span class="nf">repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_or_slug</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :type id_or_slug: int | str</span>
+<span class="sd">        :param id_or_slug:</span>
+<span class="sd">            ID of slug of repository to obtain information.</span>
+
+<span class="sd">        :rtype: :class:`.Repo`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">Repo</span><span class="p">,</span> <span class="n">id_or_slug</span><span class="p">)</span>
+
+
+    <span class="c"># Users ----------------------------------------------------------------------------------------</span></div>
+<div class="viewcode-block" id="TravisPy.user"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.user">[docs]</a>    <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :rtype: :class:`.User`</span>
+<span class="sd">        :returns:</span>
+<span class="sd">            Information about user currently logged in.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            This request always needs to be authenticated.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">TravisPy 0.1.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Fabio Menegazzo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

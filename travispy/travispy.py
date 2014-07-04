@@ -1,11 +1,14 @@
-from .entities import Account, Broadcast, Build, Hook, Job, Log, Repo, Session, User
-import requests
+'''
+.. data:: PUBLIC
+    :annotation: = URI for Travis CI free service.
 
+.. data:: PRIVATE
+    :annotation: = URI for Travis CI paid service for GitHub private repositories.
 
-
-#===================================================================================================
-# Repository types
-#===================================================================================================
+.. data:: ENTERPRISE
+    :annotation: = URI template for Travis CI service running under a personal domain. Usage will be
+                 something like ENTERPRISE % {'domain': 'http://travis.example.com'}.
+'''
 PUBLIC = 'http://api.travis-ci.org'
 PRIVATE = 'http://api.travis-ci.com'
 
@@ -14,22 +17,34 @@ PRIVATE = 'http://api.travis-ci.com'
 ENTERPRISE = '%(domain)s/api'
 
 
+from .entities import Account, Broadcast, Build, Hook, Job, Log, Repo, Session, User
+import requests
+
 
 #===================================================================================================
 # TravisPy
 #===================================================================================================
 class TravisPy:
     '''
-    This is an Python implementation of Travis-CI API.
+    Instances of this class are responsible for comunicating with |travisci|, sending requests and
+    handling responses properly. You can create as much instances as you want since each one will
+    create a separated session.
 
-    As Travis-CI API provides multiple ways to achieve the same result (to list builds of a specifid
-    repository, for instance) a single and generic function will be available here for such purposes.
+    :type token: str | None
+    :param token:
+        |travisci| token linked to your |github| account.
 
-    Experimental methods will not be supported until they become official.
+        Even if you have a public repository, some information are related to your user account
+        and not the repository itself so if token is not provided an error will be returned.
 
-    For full documentation please refer to Travis-CI API documentation.
+        Required for private and enterprise repositories to access any information.
 
-    .. seealso:: http://docs.travis-ci.com/api/
+    :type uri: :data:`PUBLIC` | :data:`PRIVATE` | :data:`ENTERPRISE` | str
+    :param uri:
+        URI where Travis CI service is running.
+
+    .. note::
+        Do not confuse ``token`` with the one found on your profile page.
     '''
 
     _HEADERS = {
@@ -38,17 +53,6 @@ class TravisPy:
     }
 
     def __init__(self, token=None, uri=PUBLIC):
-        '''
-        :param str token:
-            Travis-CI token linked to your GitHub account.
-            Even if you have a public repository, some information are related to your user account
-            and not the repository itself so if token is not provided an error will be returned.
-            Required for private and enterprise repositories to access any information.
-
-        :param str uri:
-            URI where Travis-CI is running on.
-            You may use the constants PUBLIC, PRIVATE or ENTERPRISE template.
-        '''
         self._session = session = Session(uri)
         session.headers.update(self._HEADERS)
         if token is not None:
@@ -57,6 +61,13 @@ class TravisPy:
 
     @classmethod
     def github_auth(cls, token, uri=PUBLIC):
+        '''
+        :param str token:
+            GitHub access token.
+
+        :param uri:
+            See :meth:`__init__`
+        '''
         response = requests.post(uri + '/auth/github', headers=cls._HEADERS, params={
             "github_token": token,
         })
@@ -67,10 +78,31 @@ class TravisPy:
 
     # Accounts -------------------------------------------------------------------------------------
     def accounts(self, all=False):
+        '''
+        :param bool all:
+            Whether or not to include accounts the user does not have admin access to.
+
+        :rtype: list(:class:`.Account`)
+        :returns:
+            Information of all accounts that the user might have access.This is usually the account
+            corresponding to the user directly and one account per |github| organization.
+
+        .. note::
+            This request always needs to be authenticated.
+        '''
         return self._session.find_many(Account, all=all)
 
 
     def account(self, account_id):
+        '''
+        :param int account_id:
+            ID of the account to obtain information.
+
+        :rtype: :class:`.Account`
+
+        .. note::
+            This request always needs to be authenticated.
+        '''
         for account in self.accounts(all=True):
             if account.id == account_id:
                 return account
@@ -78,11 +110,42 @@ class TravisPy:
 
     # Broadcasts -----------------------------------------------------------------------------------
     def broadcasts(self):
+        '''
+        :rtype: list(:class:`.Broadcast`)
+
+        .. note::
+            This request always needs to be authenticated.
+        '''
         return self._session.find_many(Broadcast)
 
 
     # Builds ---------------------------------------------------------------------------------------
     def builds(self, **kwargs):
+        '''
+        :keyword list(int) ids:
+            List of build ids to fetch.
+
+        :keyword int repository_id:
+            Repository id the build belongs to.
+
+        :keyword str slug:
+            Repository slug the build belongs to.
+
+        :keyword str number:
+            Filter by build number, requires ``slug`` or ``repository_id``.
+
+        :keyword str after_number:
+            List build after a given build number (use for pagination), requires ``slug`` or
+            ``repository_id``.
+
+        :keyword str event_type:
+            Limit build to given event type (``push`` or ``pull_request``).
+
+        :rtype: list(:class:`.Build`)
+
+        .. note::
+            You have to supply either ``ids``, ``repository_id`` or ``slug``.
+        '''
         exclusive_required_parameters = ['ids', 'repository_id', 'slug']
         for param in exclusive_required_parameters:
             if param in kwargs:
@@ -94,17 +157,48 @@ class TravisPy:
 
 
     def build(self, build_id):
+        '''
+        :param int build_id:
+            ID of the build to obtain information.
+
+        :rtype: :class:`.Build`
+        '''
         return self._session.find_one(Build, build_id)
 
 
     # Hooks ----------------------------------------------------------------------------------------
     def hooks(self):
+        '''
+        :rtype: list(:class:`.Hook`)
+        :returns:
+            Returns list of existing hooks that user have access.
+
+        .. note::
+            This request always needs to be authenticated.
+        '''
         return self._session.find_many(Hook)
 
 
     # Jobs -----------------------------------------------------------------------------------------
     def jobs(self, **kwargs):
-        exclusive_required_parameters = ['ids', 'repository_id', 'slug']
+        '''
+        :keyword list(int) ids:
+            List of jobs IDs.
+
+        :keyword str state:
+            Job state to filter by. Possible values are ``passed``, ``canceled``, ``failed`` and
+            ``errored``.
+
+        :keyword str queue:
+            Job queue to filter by.
+
+        :rtype: list(:class:`.Job`)
+
+        .. note::
+            You need to provide exactly one of the above parameters. If you provide ``state`` or
+            ``queue``, a maximum of 250 jobs will be returned.
+        '''
+        exclusive_required_parameters = ['ids', 'state', 'queue']
         provided_required_parameters = set(
             param
             for param in exclusive_required_parameters
@@ -118,22 +212,74 @@ class TravisPy:
 
 
     def job(self, job_id):
+        '''
+        :param int job_id:
+            ID of the job to obtain information.
+
+        :rtype: :class:`.Job`
+        '''
         return self._session.find_one(Job, job_id)
 
 
     # Log ------------------------------------------------------------------------------------------
     def log(self, log_id):
+        '''
+        :param int log_id:
+            ID of the log to obtain information.
+
+        :rtype: :class:`.Log`
+        '''
         return self._session.find_one(Log, log_id)
 
 
     # Repositories ---------------------------------------------------------------------------------
     def repos(self, **kwargs):
+        '''
+        :keyword list(int) ids:
+            List of repository ids to fetch, cannot be combined with other parameters.
+
+        :keyword str member:
+            Filter by user that has access to it (|github| login).
+
+        :keyword str owner_name:
+            Filter by owner name (first segment of slug).
+
+        :keyword str slug:
+            Filter by slug.
+
+        :keyword str search:
+            Filter by search term.
+
+        :keyword bool active:
+            If ``True``, will only return repositories that are enabled. Default is ``False``.
+
+        :rtype: list(:class:`.Repo`)
+
+        .. note::
+            If no parameters are given, a list of repositories with recent activity is returned.
+        '''
         return self._session.find_many(Repo, **kwargs)
 
 
     def repo(self, id_or_slug):
+        '''
+        :type id_or_slug: int | str
+        :param id_or_slug:
+            ID of slug of repository to obtain information.
+
+        :rtype: :class:`.Repo`
+        '''
         return self._session.find_one(Repo, id_or_slug)
+
 
     # Users ----------------------------------------------------------------------------------------
     def user(self):
+        '''
+        :rtype: :class:`.User`
+        :returns:
+            Information about user currently logged in.
+
+        .. note::
+            This request always needs to be authenticated.
+        '''
         return self._session.find_one(User, '')
