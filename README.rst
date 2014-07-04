@@ -1,7 +1,23 @@
+.. |travispy| replace:: **TravisPy**
+.. |travisci| replace:: *Travis CI*
+.. |github| replace:: *GitHub*
+
+.. _official API: http://docs.travis-ci.com/api/
+.. _Ruby: https://github.com/travis-ci/travis.rb#ruby-library
+.. _requirement: http://docs.travis-ci.com/api/#external-apis
+.. _access token: https://github.com/settings/applications
+.. _open issues: https://github.com/menegazzo/travispy/issues?state=open
+
+========
 TravisPy
 ========
 
-TravisPy is a Python API for Travis CI. It follows the `official API <http://docs.travis-ci.com/api/>`_ and is implemented as similar as possible to `Ruby implementation <https://github.com/travis-ci/travis.rb#ruby-library>`_.
+|travispy| is a Python API for |travisci|. It follows the `official API`_ and is implemented as
+similar as possible to `Ruby`_ implementation.
+
+Experimental methods will not be supported until they become official.
+
+For full documentation please refer to |travisci| `official API`_ documentation.
 
 .. image:: http://img.shields.io/pypi/v/TravisPy.svg?style=flat
     :target: https://pypi.python.org/pypi/TravisPy
@@ -20,53 +36,44 @@ TravisPy is a Python API for Travis CI. It follows the `official API <http://doc
     :alt: Coveralls
 
 Install
--------
+=======
 
-To install TravisPy all it takes is one command line::
+To install |travispy| all it takes is one command line::
 
     pip install travispy
 
-Usage
------
+Documentation
+=============
 
-TravisPy works just as Travis CI: it authenticates against GitHub. So as a `requirement <http://docs.travis-ci.com/api/#external-apis>`_ you must have a `GitHub Personal access token <https://github.com/settings/applications>`_ with the following scopes:
+* `Getting started <http://travispy.readthedocs.org/en/latest/getting_started/>`_
 
-* read:org
-* user:email
-* repo_deployment
-* repo:status
-* write:repo_hook
+* `API <http://travispy.readthedocs.org/en/latest/api/>`_
 
-With your token in hands all is easy::
-
-    >>> from travispy import TravisPy
-    >>> t = TravisPy.github_auth(<your_token>)
-    >>> t.user()
-    <travispy.entities.user.User object at 0x02C26C48>
-
-Please refer to the offical API to learn more about which `entities <http://docs.travis-ci.com/api/#entities>`_ are supported. Soon a specific and detailed documentation related to this library will be available.
+* `Entities <http://travispy.readthedocs.org/en/latest/entities/>`_
 
 Support
--------
+=======
 
-Need help? Click `here <https://github.com/menegazzo/travispy/issues?state=open>`_ and open a new issue. You'll get your answer ASAP.
+Need help? Click `here`__ and open a new issue. You'll get your answer ASAP.
+
+__ `open issues`_
 
 Contribute
-----------
+==========
 
-TravisPy is under development, so if you want to join the team, you are welcome.
+|travispy| is under development, so if you want to join the team, you are welcome.
 
-* Feel free to `open issues <https://github.com/menegazzo/travispy/issues?state=open>`_ related to bugs or ideas.
+* Feel free to `open issues`_ related to bugs or ideas.
 
 * If you are a developer:
 
-  - Fork TravisPy before making any changes.
+  - Fork |travispy| before making any changes.
 
   - Write tests.
 
   - Create a *Pull Request* so changes can be merged.
 
 License
--------
+=======
 
-TravisPy is licensed under `GPL v3.0 license <http://www.gnu.org/licenses/gpl.html>`_.
+|travispy| is licensed under `GPL v3.0 license <http://www.gnu.org/licenses/gpl-3.0-standalone.html>`_.
