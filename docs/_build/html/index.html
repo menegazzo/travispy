@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; TravisPy 0.1.1 documentation</title>
+    <title>TravisPy &mdash; TravisPy 0.1.1 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="TravisPy 0.1.1 documentation" href="#" /> 
+    <link rel="top" title="TravisPy 0.1.1 documentation" href="#" />
+    <link rel="next" title="Getting started" href="getting_started.html" /> 
   </head>
   <body>
     <div class="related">
@@ -35,6 +36,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting started"
+             accesskey="N">next</a> |</li>
         <li><a href="#">TravisPy 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
@@ -42,16 +46,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction</a></li>
+<li><a class="reference internal" href="#">TravisPy</a><ul>
 <li><a class="reference internal" href="#install">Install</a></li>
-<li><a class="reference internal" href="#quick-start">Quick start</a></li>
-<li><a class="reference internal" href="#module-travispy.travispy">Constants</a></li>
-<li><a class="reference internal" href="#module-travispy.travispy">Classes</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
 <li><a class="reference internal" href="#support">Support</a></li>
 <li><a class="reference internal" href="#contribute">Contribute</a></li>
 <li><a class="reference internal" href="#license">License</a></li>
 </ul>
+</li>
+</ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="getting_started.html"
+                        title="next chapter">Getting started</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -79,7 +86,7 @@
           <div class="body">
             
   <div class="section" id="module-travispy">
-<span id="introduction"></span><h1>Introduction<a class="headerlink" href="#module-travispy" title="Permalink to this headline">¶</a></h1>
+<span id="travispy"></span><h1>TravisPy<a class="headerlink" href="#module-travispy" title="Permalink to this headline">¶</a></h1>
 <p><strong>TravisPy</strong> is a Python API for <em>Travis CI</em>. It follows the <a class="reference external" href="http://docs.travis-ci.com/api/">official API</a> and is implemented as
 similar as possible to <a class="reference external" href="https://github.com/travis-ci/travis.rb#ruby-library">Ruby</a> implementation.</p>
 <p>Experimental methods will not be supported until they become official.</p>
@@ -88,711 +95,29 @@ similar as possible to <a class="reference external" href="https://github.com/tr
 <a class="reference external image-reference" href="http://www.gnu.org/licenses/gpl-3.0-standalone.html"><img alt="License" src="http://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat" /></a>
 <a class="reference external image-reference" href="https://travis-ci.org/menegazzo/travispy"><img alt="Build status" src="http://img.shields.io/travis/menegazzo/travispy.svg?style=flat" /></a>
 <a class="reference external image-reference" href="https://coveralls.io/r/menegazzo/travispy?branch=master"><img alt="Coveralls" src="http://img.shields.io/coveralls/menegazzo/travispy.svg?style=flat" /></a>
-</div>
 <div class="section" id="install">
-<h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
 <p>To install <strong>TravisPy</strong> all it takes is one command line:</p>
 <div class="highlight-python"><div class="highlight"><pre>pip install travispy
 </pre></div>
 </div>
 </div>
-<div class="section" id="quick-start">
-<h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
-<p><strong>TravisPy</strong> works just as <em>Travis CI</em>: it authenticates against <em>GitHub</em>. So as a <a class="reference external" href="http://docs.travis-ci.com/api/#external-apis">requirement</a> you
-must have a <em>GitHub</em> <a class="reference external" href="https://github.com/settings/applications">access token</a> with the following scopes:</p>
-<ul class="simple">
-<li>read:org</li>
-<li>user:email</li>
-<li>repo_deployment</li>
-<li>repo:status</li>
-<li>write:repo_hook</li>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entities.html">Entities</a></li>
 </ul>
-<p>With your token in hands all is easy:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">travispy</span> <span class="kn">import</span> <span class="n">TravisPy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">TravisPy</span><span class="o">.</span><span class="n">github_auth</span><span class="p">(</span><span class="o">&lt;</span><span class="n">your_github_token</span><span class="o">&gt;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">user</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span>
-<span class="go">&lt;travispy.entities.user.User object at 0x02C26C48&gt;</span>
-</pre></div>
 </div>
-<p>Now you can access information related to user current logged in:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="o">.</span><span class="n">login</span>
-<span class="go">&#39;travispy&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">user</span><span class="p">[</span><span class="s">&#39;login&#39;</span><span class="p">]</span>
-<span class="go">&#39;travispy&#39;</span>
-</pre></div>
-</div>
-<p>To get the list of repositories that you are member of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">repos</span><span class="p">(</span><span class="n">member</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">login</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">repos</span><span class="p">)</span> <span class="c"># Ordered by recent activity</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">&lt;travispy.entities.repo.Repo object at 0x02C26C49&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">slug</span>
-<span class="go">&#39;travispy/on_py34&#39;</span>
-</pre></div>
-</div>
-<p>Or simply request for repository you want:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">repo</span><span class="p">(</span><span class="s">&#39;travispy/on_py34&#39;</span><span class="p">)</span>
-<span class="go">&lt;travispy.entities.repo.Repo object at 0x02C26C51&gt;</span>
-</pre></div>
-</div>
-<p>And finally, getting build information:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">build</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">last_build_id</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">build</span>
-<span class="go">&lt;travispy.entities.build.Build object at 0x02C26C50&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">build</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">build</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">build</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span> <span class="c"># As build was already cancelled it will return False.</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-<p>Please refer to the <a class="reference external" href="http://docs.travis-ci.com/api/">official API</a> to learn more about which <a class="reference external" href="http://docs.travis-ci.com/api/#entities">entities</a> are supported. Soon a
-specific and detailed documentation related to this library will be available.</p>
-</div>
-<div class="section" id="module-travispy.travispy">
-<span id="constants"></span><h1>Constants<a class="headerlink" href="#module-travispy.travispy" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
-<dt id="travispy.travispy.PUBLIC">
-<tt class="descclassname">travispy.travispy.</tt><tt class="descname">PUBLIC</tt><em class="property"> = URI for Travis CI free service.</em><a class="headerlink" href="#travispy.travispy.PUBLIC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="data">
-<dt id="travispy.travispy.PRIVATE">
-<tt class="descclassname">travispy.travispy.</tt><tt class="descname">PRIVATE</tt><em class="property"> = URI for Travis CI paid service for GitHub private repositories.</em><a class="headerlink" href="#travispy.travispy.PRIVATE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="data">
-<dt id="travispy.travispy.ENTERPRISE">
-<tt class="descclassname">travispy.travispy.</tt><tt class="descname">ENTERPRISE</tt><em class="property"> = URI template for Travis CI service running under a personal domain. Usage will be
-something like ENTERPRISE % {'domain': 'http://travis.example.com'}.</em><a class="headerlink" href="#travispy.travispy.ENTERPRISE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-travispy.travispy">
-<span id="classes"></span><h1>Classes<a class="headerlink" href="#module-travispy.travispy" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="travispy.travispy.TravisPy">
-<em class="property">class </em><tt class="descclassname">travispy.travispy.</tt><tt class="descname">TravisPy</tt><big>(</big><em>token=None</em>, <em>uri='http://api.travis-ci.org'</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instances of this class are responsible for comunicating with <em>Travis CI</em>, sending requests and
-handling responses properly. You can create as much instances as you want since each one will
-create a separated session.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>token</strong> (<em>str | None</em>) &#8211; <p><em>Travis CI</em> token linked to your <em>GitHub</em> account.</p>
-<p>Even if you have a public repository, some information are related to your user account
-and not the repository itself so if token is not provided an error will be returned.</p>
-<p>Required for private and enterprise repositories to access any information.</p>
-</li>
-<li><strong>uri</strong> (<a class="reference internal" href="#travispy.travispy.PUBLIC" title="travispy.travispy.PUBLIC"><tt class="xref py py-data docutils literal"><span class="pre">PUBLIC</span></tt></a> | <a class="reference internal" href="#travispy.travispy.PRIVATE" title="travispy.travispy.PRIVATE"><tt class="xref py py-data docutils literal"><span class="pre">PRIVATE</span></tt></a> | <a class="reference internal" href="#travispy.travispy.ENTERPRISE" title="travispy.travispy.ENTERPRISE"><tt class="xref py py-data docutils literal"><span class="pre">ENTERPRISE</span></tt></a> | str) &#8211; URI where Travis CI service is running.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Do not confuse <tt class="docutils literal"><span class="pre">token</span></tt> with the one found on your profile page.</p>
-</div>
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.account">
-<tt class="descname">account</tt><big>(</big><em>account_id</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.account" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>account_id</strong> (<em>int</em>) &#8211; ID of the account to obtain information.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.Account" title="travispy.entities.Account"><tt class="xref py py-class docutils literal"><span class="pre">Account</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This request always needs to be authenticated.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.accounts">
-<tt class="descname">accounts</tt><big>(</big><em>all=False</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.accounts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.accounts" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>all</strong> (<em>bool</em>) &#8211; Whether or not to include accounts the user does not have admin access to.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#travispy.entities.Account" title="travispy.entities.Account"><tt class="xref py py-class docutils literal"><span class="pre">Account</span></tt></a>)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Information of all accounts that the user might have access.This is usually the account
-corresponding to the user directly and one account per <em>GitHub</em> organization.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This request always needs to be authenticated.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.broadcasts">
-<tt class="descname">broadcasts</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.broadcasts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.broadcasts" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#travispy.entities.Broadcast" title="travispy.entities.Broadcast"><tt class="xref py py-class docutils literal"><span class="pre">Broadcast</span></tt></a>)</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This request always needs to be authenticated.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.build">
-<tt class="descname">build</tt><big>(</big><em>build_id</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.build" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>build_id</strong> (<em>int</em>) &#8211; ID of the build to obtain information.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.Build" title="travispy.entities.Build"><tt class="xref py py-class docutils literal"><span class="pre">Build</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.builds">
-<tt class="descname">builds</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.builds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.builds" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ids</strong> (<em>list(int)</em>) &#8211; List of build ids to fetch.</li>
-<li><strong>repository_id</strong> (<em>int</em>) &#8211; Repository id the build belongs to.</li>
-<li><strong>slug</strong> (<em>str</em>) &#8211; Repository slug the build belongs to.</li>
-<li><strong>number</strong> (<em>str</em>) &#8211; Filter by build number, requires <tt class="docutils literal"><span class="pre">slug</span></tt> or <tt class="docutils literal"><span class="pre">repository_id</span></tt>.</li>
-<li><strong>after_number</strong> (<em>str</em>) &#8211; List build after a given build number (use for pagination), requires <tt class="docutils literal"><span class="pre">slug</span></tt> or
-<tt class="docutils literal"><span class="pre">repository_id</span></tt>.</li>
-<li><strong>event_type</strong> (<em>str</em>) &#8211; Limit build to given event type (<tt class="docutils literal"><span class="pre">push</span></tt> or <tt class="docutils literal"><span class="pre">pull_request</span></tt>).</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#travispy.entities.Build" title="travispy.entities.Build"><tt class="xref py py-class docutils literal"><span class="pre">Build</span></tt></a>)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You have to supply either <tt class="docutils literal"><span class="pre">ids</span></tt>, <tt class="docutils literal"><span class="pre">repository_id</span></tt> or <tt class="docutils literal"><span class="pre">slug</span></tt>.</p>
-</div>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="travispy.travispy.TravisPy.github_auth">
-<em class="property">classmethod </em><tt class="descname">github_auth</tt><big>(</big><em>token</em>, <em>uri='http://api.travis-ci.org'</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.github_auth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.github_auth" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>token</strong> (<em>str</em>) &#8211; GitHub access token.</li>
-<li><strong>uri</strong> &#8211; See <tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.hooks">
-<tt class="descname">hooks</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.hooks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.hooks" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#travispy.entities.Hook" title="travispy.entities.Hook"><tt class="xref py py-class docutils literal"><span class="pre">Hook</span></tt></a>)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns list of existing hooks that user have access.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This request always needs to be authenticated.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.job">
-<tt class="descname">job</tt><big>(</big><em>job_id</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.job" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job_id</strong> (<em>int</em>) &#8211; ID of the job to obtain information.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.Job" title="travispy.entities.Job"><tt class="xref py py-class docutils literal"><span class="pre">Job</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.jobs">
-<tt class="descname">jobs</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.jobs" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ids</strong> (<em>list(int)</em>) &#8211; List of jobs IDs.</li>
-<li><strong>state</strong> (<em>str</em>) &#8211; Job state to filter by. Possible values are <tt class="docutils literal"><span class="pre">passed</span></tt>, <tt class="docutils literal"><span class="pre">canceled</span></tt>, <tt class="docutils literal"><span class="pre">failed</span></tt> and
-<tt class="docutils literal"><span class="pre">errored</span></tt>.</li>
-<li><strong>queue</strong> (<em>str</em>) &#8211; Job queue to filter by.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#travispy.entities.Job" title="travispy.entities.Job"><tt class="xref py py-class docutils literal"><span class="pre">Job</span></tt></a>)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You need to provide exactly one of the above parameters. If you provide <tt class="docutils literal"><span class="pre">state</span></tt> or
-<tt class="docutils literal"><span class="pre">queue</span></tt>, a maximum of 250 jobs will be returned.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.log">
-<tt class="descname">log</tt><big>(</big><em>log_id</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.log" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log_id</strong> (<em>int</em>) &#8211; ID of the log to obtain information.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.Log" title="travispy.entities.Log"><tt class="xref py py-class docutils literal"><span class="pre">Log</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.repo">
-<tt class="descname">repo</tt><big>(</big><em>id_or_slug</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.repo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.repo" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id_or_slug</strong> (<em>int | str</em>) &#8211; ID of slug of repository to obtain information.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.Repo" title="travispy.entities.Repo"><tt class="xref py py-class docutils literal"><span class="pre">Repo</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.repos">
-<tt class="descname">repos</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.repos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.repos" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ids</strong> (<em>list(int)</em>) &#8211; List of repository ids to fetch, cannot be combined with other parameters.</li>
-<li><strong>member</strong> (<em>str</em>) &#8211; Filter by user that has access to it (<em>GitHub</em> login).</li>
-<li><strong>owner_name</strong> (<em>str</em>) &#8211; Filter by owner name (first segment of slug).</li>
-<li><strong>slug</strong> (<em>str</em>) &#8211; Filter by slug.</li>
-<li><strong>search</strong> (<em>str</em>) &#8211; Filter by search term.</li>
-<li><strong>active</strong> (<em>bool</em>) &#8211; If <tt class="docutils literal"><span class="pre">True</span></tt>, will only return repositories that are enabled. Default is <tt class="docutils literal"><span class="pre">False</span></tt>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#travispy.entities.Repo" title="travispy.entities.Repo"><tt class="xref py py-class docutils literal"><span class="pre">Repo</span></tt></a>)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If no parameters are given, a list of repositories with recent activity is returned.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.TravisPy.user">
-<tt class="descname">user</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/travispy.html#TravisPy.user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.travispy.TravisPy.user" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#travispy.entities.User" title="travispy.entities.User"><tt class="xref py py-class docutils literal"><span class="pre">User</span></tt></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Information about user currently logged in.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This request always needs to be authenticated.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.travispy.Session">
-<em class="property">class </em><tt class="descclassname">travispy.travispy.</tt><tt class="descname">Session</tt><big>(</big><em>uri</em><big>)</big><a class="headerlink" href="#travispy.travispy.Session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internet session created to perform requests to <em>Travis CI</em>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uri</strong> (<em>str</em>) &#8211; URI where session will start.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="travispy.travispy.Session.find_many">
-<tt class="descname">find_many</tt><big>(</big><em>entity_class</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#travispy.travispy.Session.find_many" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method responsible for returning as many as possible matches for given <tt class="docutils literal"><span class="pre">entity_class</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>entity_class</strong> (<a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a>) &#8211; Class of entity that information will be retrieved from <em>Travis CI</em>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(<tt class="docutils literal"><span class="pre">entity_class</span></tt>)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.travispy.Session.find_one">
-<tt class="descname">find_one</tt><big>(</big><em>entity_class</em>, <em>entity_id</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#travispy.travispy.Session.find_one" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method responsible for returning exactly one instance of the given <tt class="docutils literal"><span class="pre">entity_class</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>entity_class</strong> (<a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">Entity</span></tt></a>) &#8211; Class of entity that information will be retrieved from <em>Travis CI</em>.</li>
-<li><strong>entity_id</strong> (<em>int</em>) &#8211; The ID of the entity.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">entity_class</span></tt> instance</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-travispy.entities._entity"></span><dl class="class">
-<dt id="travispy.entities._entity.Entity">
-<em class="property">class </em><tt class="descclassname">travispy.entities._entity.</tt><tt class="descname">Entity</tt><big>(</big><em>session</em><big>)</big><a class="reference internal" href="_modules/travispy/entities/_entity.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._entity.Entity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all <em>Travis CI</em> entities.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<a class="reference internal" href="#travispy.travispy.Session" title="travispy.travispy.Session"><tt class="xref py py-class docutils literal"><span class="pre">Session</span></tt></a>) &#8211; Internet session in which entity information will be requested.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><strong>id</strong> (<em>int</em>) &#8211; The entity ID.</td>
-</tr>
-</tbody>
-</table>
-<dl class="classmethod">
-<dt id="travispy.entities._entity.Entity.many">
-<em class="property">classmethod </em><tt class="descname">many</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/entities/_entity.html#Entity.many"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._entity.Entity.many" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String representation for multiple entities.
-Example: for <a class="reference internal" href="#travispy.entities.Account" title="travispy.entities.Account"><tt class="xref py py-class docutils literal"><span class="pre">Account</span></tt></a> will be <tt class="docutils literal"><span class="pre">accounts</span></tt>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="travispy.entities._entity.Entity.one">
-<em class="property">classmethod </em><tt class="descname">one</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/entities/_entity.html#Entity.one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._entity.Entity.one" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String representation for a single entity.
-Example: for <a class="reference internal" href="#travispy.entities.Account" title="travispy.entities.Account"><tt class="xref py py-class docutils literal"><span class="pre">Account</span></tt></a> will be <tt class="docutils literal"><span class="pre">account</span></tt>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-travispy.entities._restartable"></span><dl class="class">
-<dt id="travispy.entities._restartable.Restartable">
-<em class="property">class </em><tt class="descclassname">travispy.entities._restartable.</tt><tt class="descname">Restartable</tt><big>(</big><em>session</em><big>)</big><a class="reference internal" href="_modules/travispy/entities/_restartable.html#Restartable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._restartable.Restartable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<p>Base class for restartable entities such as <a class="reference internal" href="#travispy.entities.Build" title="travispy.entities.Build"><tt class="xref py py-class docutils literal"><span class="pre">Build</span></tt></a> and <a class="reference internal" href="#travispy.entities.Job" title="travispy.entities.Job"><tt class="xref py py-class docutils literal"><span class="pre">Job</span></tt></a>.</p>
-<dl class="method">
-<dt id="travispy.entities._restartable.Restartable.cancel">
-<tt class="descname">cancel</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/entities/_restartable.html#Restartable.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._restartable.Restartable.cancel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method responsible for canceling current action of this object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">True</span></tt> if cancel request was send successfuly to <em>Travis CI</em>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="travispy.entities._restartable.Restartable.restart">
-<tt class="descname">restart</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/travispy/entities/_restartable.html#Restartable.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#travispy.entities._restartable.Restartable.restart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Method responsible for restarting the last action executed by this action.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">True</span></tt> if restart request was send successfuly to <em>Travis CI</em>.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-travispy.entities"></span><dl class="class">
-<dt id="travispy.entities.Account">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Account</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Account" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<p>A user might have access to multiple accounts. This is usually the account corresponding to the
-user directly and one account per <em>GitHub</em> organization.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; User or organization id.</li>
-<li><strong>login</strong> (<em>str</em>) &#8211; Account name on <em>GitHub</em>.</li>
-<li><strong>type</strong> (<em>str</em>) &#8211; Account login on <em>GitHub</em>.</li>
-<li><strong>repos_count</strong> (<em>int</em>) &#8211; Number of repositories.</li>
-<li><strong>subscribed</strong> (<em>bool</em>) &#8211; Whether or not the account has a valid subscription.
-Only available on <em>Travis Pro</em>.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Broadcast">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Broadcast</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Broadcast" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>message</strong> (<em>str</em>) &#8211; Broadcast message.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Build">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Build</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Build" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._restartable.Restartable" title="travispy.entities._restartable.Restartable"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._restartable.Restartable</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>repository_id</strong> (<em>int</em>) &#8211; Repository ID.</li>
-<li><strong>commit_id</strong> (<em>str</em>) &#8211; Commit ID.</li>
-<li><strong>number</strong> (<em>str</em>) &#8211; Build number.</li>
-<li><strong>pull_request</strong> (<em>bool</em>) &#8211; Whether or not the build comes from a pull request.</li>
-<li><strong>pull_request_title</strong> (<em>str</em>) &#8211; PR title if <tt class="xref py py-attr docutils literal"><span class="pre">pull_request</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>.</li>
-<li><strong>pull_request_number</strong> (<em>str</em>) &#8211; PR number if <tt class="xref py py-attr docutils literal"><span class="pre">pull_request</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>.</li>
-<li><strong>config</strong> (<em>dict</em>) &#8211; Build config (secure values and ssh key removed). It comes from <tt class="docutils literal"><span class="pre">.travis.yml</span></tt> file.</li>
-<li><strong>state</strong> (<em>str</em>) &#8211; Build state.</li>
-<li><strong>started_at</strong> (<em>str</em>) &#8211; Time the build was started.</li>
-<li><strong>finished_at</strong> (<em>str</em>) &#8211; Time the build finished.</li>
-<li><strong>duration</strong> (<em>str</em>) &#8211; Build duration. It might not correspond to <tt class="xref py py-attr docutils literal"><span class="pre">finished_at</span></tt> - <tt class="xref py py-attr docutils literal"><span class="pre">started_at</span></tt> if the
-build was restarted at a later point.</li>
-<li><strong>job_ids</strong> (<em>list(int)</em>) &#8211; List of job IDs in the build matrix.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Hook">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Hook</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Hook" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Hook name.</li>
-<li><strong>description</strong> (<em>str</em>) &#8211; Hook description.</li>
-<li><strong>owner_name</strong> (<em>str</em>) &#8211; Owner name.</li>
-<li><strong>active</strong> (<em>str</em>) &#8211; Whether or not the hook is active.</li>
-<li><strong>private</strong> (<em>str</em>) &#8211; Whether or not the hook is private.</li>
-<li><strong>admin</strong> (<em>bool</em>) &#8211; Whether or not current user has administrator privileges.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Job">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Job</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._restartable.Restartable" title="travispy.entities._restartable.Restartable"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._restartable.Restartable</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>build_id</strong> (<em>int</em>) &#8211; Build ID.</li>
-<li><strong>repository_id</strong> (<em>int</em>) &#8211; Repository ID.</li>
-<li><strong>commit_id</strong> (<em>int</em>) &#8211; Commit ID.</li>
-<li><strong>log_id</strong> (<em>int</em>) &#8211; Log ID.</li>
-<li><strong>number</strong> (<em>str</em>) &#8211; Job number.</li>
-<li><strong>config</strong> (<em>dict</em>) &#8211; Job config (secure values and ssh key removed). It comes from <tt class="docutils literal"><span class="pre">.travis.yml</span></tt> file.</li>
-<li><strong>state</strong> (<em>str</em>) &#8211; Job state.</li>
-<li><strong>started_at</strong> (<em>str</em>) &#8211; Time the job was started.</li>
-<li><strong>finished_at</strong> (<em>str</em>) &#8211; Time the job finished.</li>
-<li><strong>duration</strong> (<em>str</em>) &#8211; Job duration. It might not correspond to <tt class="xref py py-attr docutils literal"><span class="pre">finished_at</span></tt> - <tt class="xref py py-attr docutils literal"><span class="pre">started_at</span></tt> if the
-job was restarted at a later point.</li>
-<li><strong>queue</strong> (<em>str</em>) &#8211; Job queue.</li>
-<li><strong>allow_failure</strong> (<em>bool</em>) &#8211; Whether or not the job state influences build state.</li>
-<li><strong>annotation_ids</strong> (<em>list(int)</em>) &#8211; List of annotation IDs.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Log">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Log</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Log" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>job_id</strong> (<em>int</em>) &#8211; Jod ID.</li>
-<li><strong>body</strong> (<em>str</em>) &#8211; Log body.</li>
-<li><strong>type</strong> (<em>str</em>) &#8211; </li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.Repo">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">Repo</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.Repo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>slug</strong> (<em>str</em>) &#8211; Repository slug.</li>
-<li><strong>description</strong> (<em>str</em>) &#8211; Description on <em>GitHub</em>.</li>
-<li><strong>last_build_id</strong> (<em>int</em>) &#8211; Build ID of the last executed build.</li>
-<li><strong>last_build_number</strong> (<em>str</em>) &#8211; Build number of the last executed build.</li>
-<li><strong>last_build_state</strong> (<em>str</em>) &#8211; Build state of the last executed build.</li>
-<li><strong>last_build_duration</strong> (<em>str</em>) &#8211; Build duration of the last executed build.</li>
-<li><strong>last_build_started_at</strong> (<em>str</em>) &#8211; Build started at of the last executed build.</li>
-<li><strong>last_build_finished_at</strong> (<em>str</em>) &#8211; Build finished at of the last executed build.</li>
-<li><strong>github_language</strong> (<em>str</em>) &#8211; Language on <em>GitHub</em>.</li>
-<li><strong>active</strong> (<em>bool</em>) &#8211; Whether or not the repository is active on <em>Travis CI</em>.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="travispy.entities.User">
-<em class="property">class </em><tt class="descclassname">travispy.entities.</tt><tt class="descname">User</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#travispy.entities.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#travispy.entities._entity.Entity" title="travispy.entities._entity.Entity"><tt class="xref py py-class docutils literal"><span class="pre">travispy.entities._entity.Entity</span></tt></a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>login</strong> (<em>str</em>) &#8211; User login on <em>GitHub</em>.</li>
-<li><strong>name</strong> (<em>str</em>) &#8211; User name on <em>GitHub</em>.</li>
-<li><strong>email</strong> (<em>str</em>) &#8211; Primary email address on <em>GitHub</em>.</li>
-<li><strong>gravatar_id</strong> (<em>str</em>) &#8211; Avatar ID.</li>
-<li><strong>is_syncing</strong> (<em>bool</em>) &#8211; Whether or not user account is currently being synced.</li>
-<li><strong>synced_at</strong> (<em>str</em>) &#8211; Last synced at.</li>
-<li><strong>correct_scopes</strong> (<em>bool</em>) &#8211; Whether or not <em>GitHub</em> token has the correct scopes.</li>
-<li><strong>channels</strong> (<em>str</em>) &#8211; Pusher channels for this user.</li>
-<li><strong>created_at</strong> (<em>str</em>) &#8211; When account was created.</li>
-<li><strong>locale</strong> (<em>str</em>) &#8211; User main locale.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <div class="section" id="support">
-<h1>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h1>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
 <p>Need help? Click <a class="reference external" href="https://github.com/menegazzo/travispy/issues?state=open">here</a> and open a new issue. You&#8217;ll get your answer ASAP.</p>
 </div>
 <div class="section" id="contribute">
-<h1>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h1>
+<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this headline">¶</a></h2>
 <p><strong>TravisPy</strong> is under development, so if you want to join the team, you are welcome.</p>
 <ul class="simple">
 <li>Feel free to <a class="reference external" href="https://github.com/menegazzo/travispy/issues?state=open">open issues</a> related to bugs or ideas.</li>
@@ -805,8 +130,9 @@ job was restarted at a later point.</li>
 </ul>
 </div>
 <div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p><strong>TravisPy</strong> is licensed under <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPL v3.0 license</a>.</p>
+</div>
 </div>
 
 
@@ -824,6 +150,9 @@ job was restarted at a later point.</li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting started"
+             >next</a> |</li>
         <li><a href="#">TravisPy 0.1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

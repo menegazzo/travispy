@@ -90,7 +90,7 @@
 <span class="c">#===================================================================================================</span>
 <span class="c"># TravisPy</span>
 <span class="c">#===================================================================================================</span>
-<div class="viewcode-block" id="TravisPy"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy">[docs]</a><span class="k">class</span> <span class="nc">TravisPy</span><span class="p">:</span>
+<div class="viewcode-block" id="TravisPy"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy">[docs]</a><span class="k">class</span> <span class="nc">TravisPy</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Instances of this class are responsible for comunicating with |travisci|, sending requests and</span>
 <span class="sd">    handling responses properly. You can create as much instances as you want since each one will</span>
@@ -126,7 +126,7 @@
 
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="TravisPy.github_auth"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.github_auth">[docs]</a>    <span class="k">def</span> <span class="nf">github_auth</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">PUBLIC</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.github_auth"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.github_auth">[docs]</a>    <span class="k">def</span> <span class="nf">github_auth</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">PUBLIC</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param str token:</span>
 <span class="sd">            GitHub access token.</span>
@@ -143,7 +143,7 @@
 
 
     <span class="c"># Accounts -------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.accounts"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.accounts">[docs]</a>    <span class="k">def</span> <span class="nf">accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.accounts"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.accounts">[docs]</a>    <span class="k">def</span> <span class="nf">accounts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param bool all:</span>
 <span class="sd">            Whether or not to include accounts the user does not have admin access to.</span>
@@ -159,7 +159,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Account</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="nb">all</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="TravisPy.account"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.account">[docs]</a>    <span class="k">def</span> <span class="nf">account</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">account_id</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.account"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.account">[docs]</a>    <span class="k">def</span> <span class="nf">account</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">account_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param int account_id:</span>
 <span class="sd">            ID of the account to obtain information.</span>
@@ -175,7 +175,7 @@
 
 
     <span class="c"># Broadcasts -----------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.broadcasts"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.broadcasts">[docs]</a>    <span class="k">def</span> <span class="nf">broadcasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.broadcasts"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.broadcasts">[docs]</a>    <span class="k">def</span> <span class="nf">broadcasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :rtype: list(:class:`.Broadcast`)</span>
 
@@ -186,7 +186,7 @@
 
 
     <span class="c"># Builds ---------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.builds"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.builds">[docs]</a>    <span class="k">def</span> <span class="nf">builds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.builds"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.builds">[docs]</a>    <span class="k">def</span> <span class="nf">builds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :keyword list(int) ids:</span>
 <span class="sd">            List of build ids to fetch.</span>
@@ -222,7 +222,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Build</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="TravisPy.build"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.build"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param int build_id:</span>
 <span class="sd">            ID of the build to obtain information.</span>
@@ -233,7 +233,7 @@
 
 
     <span class="c"># Hooks ----------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.hooks"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.hooks">[docs]</a>    <span class="k">def</span> <span class="nf">hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.hooks"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.hooks">[docs]</a>    <span class="k">def</span> <span class="nf">hooks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :rtype: list(:class:`.Hook`)</span>
 <span class="sd">        :returns:</span>
@@ -246,7 +246,7 @@
 
 
     <span class="c"># Jobs -----------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.jobs"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.jobs">[docs]</a>    <span class="k">def</span> <span class="nf">jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.jobs"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.jobs">[docs]</a>    <span class="k">def</span> <span class="nf">jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :keyword list(int) ids:</span>
 <span class="sd">            List of jobs IDs.</span>
@@ -277,7 +277,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="TravisPy.job"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.job">[docs]</a>    <span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.job"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.job">[docs]</a>    <span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param int job_id:</span>
 <span class="sd">            ID of the job to obtain information.</span>
@@ -288,7 +288,7 @@
 
 
     <span class="c"># Log ------------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.log"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_id</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.log"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :param int log_id:</span>
 <span class="sd">            ID of the log to obtain information.</span>
@@ -299,7 +299,7 @@
 
 
     <span class="c"># Repositories ---------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.repos"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.repos">[docs]</a>    <span class="k">def</span> <span class="nf">repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.repos"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.repos">[docs]</a>    <span class="k">def</span> <span class="nf">repos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :keyword list(int) ids:</span>
 <span class="sd">            List of repository ids to fetch, cannot be combined with other parameters.</span>
@@ -327,7 +327,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">find_many</span><span class="p">(</span><span class="n">Repo</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="TravisPy.repo"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.repo">[docs]</a>    <span class="k">def</span> <span class="nf">repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_or_slug</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.repo"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.repo">[docs]</a>    <span class="k">def</span> <span class="nf">repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_or_slug</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :type id_or_slug: int | str</span>
 <span class="sd">        :param id_or_slug:</span>
@@ -339,7 +339,7 @@
 
 
     <span class="c"># Users ----------------------------------------------------------------------------------------</span></div>
-<div class="viewcode-block" id="TravisPy.user"><a class="viewcode-back" href="../../index.html#travispy.travispy.TravisPy.user">[docs]</a>    <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TravisPy.user"><a class="viewcode-back" href="../../api.html#travispy.travispy.TravisPy.user">[docs]</a>    <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        :rtype: :class:`.User`</span>
 <span class="sd">        :returns:</span>
