@@ -166,6 +166,7 @@ class Test:
         assert hasattr(repo, 'last_build_duration')
         assert hasattr(repo, 'last_build_started_at')
         assert hasattr(repo, 'last_build_finished_at')
+        assert repo.state == repo.last_build_state
 
 
     def test_user(self):

@@ -1,11 +1,11 @@
-from ._entity import Entity
+from ._stateful import Stateful
 
 
 
 #===================================================================================================
 # Restartable
 #===================================================================================================
-class Restartable(Entity):
+class Restartable(Stateful):
     '''
     Base class for restartable entities such as :class:`.Build` and :class:`.Job`.
     '''

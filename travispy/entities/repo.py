@@ -1,11 +1,11 @@
-from ._entity import Entity
+from ._stateful import Stateful
 
 
 
 #===================================================================================================
 # Repo
 #===================================================================================================
-class Repo(Entity):
+class Repo(Stateful):
     '''
     :ivar str slug:
         Repository slug.
@@ -51,3 +51,12 @@ class Repo(Entity):
         'github_language',
         'active',
     ]
+
+    @property
+    def state(self):
+        '''
+        :class:`.Repo` state is given through ``last_build_state``.
+
+        .. seealso:: :class:`.Stateful` for ``state`` full documentation.
+        '''
+        return self.last_build_state
