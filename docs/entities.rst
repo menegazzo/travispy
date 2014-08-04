@@ -22,6 +22,9 @@ This document brings information about all entities that are used by |travispy| 
 .. autoclass:: Entity
     :no-show-inheritance:
 
+.. module:: travispy.entities._stateful
+.. autoclass:: Stateful
+
 .. module:: travispy.entities._restartable
 .. autoclass:: Restartable
 

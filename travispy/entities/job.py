@@ -52,7 +52,6 @@ class Job(Restartable):
         'log_id',
         'number',
         'config',
-        'state',
         'started_at',
         'finished_at',
         'duration',
