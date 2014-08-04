@@ -8,17 +8,17 @@ import pytest
 class Test:
 
     @pytest.mark.parametrize(
-        'state, created, queued, started, passed, failed, errored, canceled, ready, pending, running, finished, successful, unsuccessful, color, green, yellow, red', [
-        (Stateful.CREATED, True, False, False, False, False, False, False, False, True, False, False, False, False, Stateful.YELLOW, False, True, False),
-        (Stateful.QUEUED, True, True, False, False, False, False, False, False, True, False, False, False, False, Stateful.YELLOW, False, True, False),
-        (Stateful.STARTED, True, True, True, False, False, False, False, False, True, True, False, False, False, Stateful.YELLOW, False, True, False),
-        (Stateful.PASSED, True, True, True, True, False, False, False, False, False, False, True, True, False, Stateful.GREEN, True, False, False),
-        (Stateful.FAILED, True, True, True, False, True, False, False, False, False, False, True, False, True, Stateful.RED, False, False, True),
-        (Stateful.ERRORED, True, True, True, False, False, True, False, False, False, False, True, False, True, Stateful.RED, False, False, True),
-        (Stateful.CANCELED, True, True, True, False, False, False, True, False, False, False, True, False, True, Stateful.RED, False, False, True),
-        (Stateful.READY, True, True, True, False, False, False, False, True, False, False, True, False, False, Stateful.GREEN, True, False, False),
+        'state, color, expected_true_properties', [
+        (Stateful.CREATED, Stateful.YELLOW, (Stateful.CREATED, Stateful.YELLOW, 'pending')),
+        (Stateful.QUEUED, Stateful.YELLOW, (Stateful.CREATED, Stateful.QUEUED, Stateful.YELLOW, 'pending')),
+        (Stateful.STARTED, Stateful.YELLOW, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.YELLOW, 'pending', 'running')),
+        (Stateful.PASSED, Stateful.GREEN, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.PASSED, Stateful.GREEN, 'finished', 'successful')),
+        (Stateful.FAILED, Stateful.RED, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.FAILED, Stateful.RED, 'finished', 'unsuccessful')),
+        (Stateful.ERRORED, Stateful.RED, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.ERRORED, Stateful.RED, 'finished', 'unsuccessful')),
+        (Stateful.CANCELED, Stateful.RED, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.CANCELED, Stateful.RED, 'finished', 'unsuccessful')),
+        (Stateful.READY, Stateful.GREEN, (Stateful.CREATED, Stateful.QUEUED, Stateful.STARTED, Stateful.READY, Stateful.GREEN, 'finished')),
     ])
-    def testStateful(self, state, created, queued, started, passed, failed, errored, canceled, ready, pending, running, finished, successful, unsuccessful, color, green, yellow, red):
+    def test_stateful(self, state, color, expected_true_properties):
         stateful = Stateful(None)
 
         assert hasattr(stateful, 'state') == False
@@ -30,20 +30,24 @@ class Test:
             stateful.created
 
         stateful.state = state
-        assert stateful.created == created
-        assert stateful.queued == queued
-        assert stateful.started == started
-        assert stateful.passed == passed
-        assert stateful.failed == failed
-        assert stateful.errored == errored
-        assert stateful.canceled == canceled
-        assert stateful.ready == ready
-        assert stateful.pending == pending
-        assert stateful.running == running
-        assert stateful.finished == finished
-        assert stateful.successful == successful
-        assert stateful.unsuccessful == unsuccessful
         assert stateful.color == color
-        assert stateful.green == green
-        assert stateful.yellow == yellow
-        assert stateful.red == red
+        
+        for prop in [
+            Stateful.CREATED,
+            Stateful.QUEUED,
+            Stateful.STARTED,
+            Stateful.PASSED,
+            Stateful.FAILED,
+            Stateful.ERRORED,
+            Stateful.CANCELED,
+            Stateful.READY,
+            Stateful.GREEN,
+            Stateful.YELLOW,
+            Stateful.RED,
+            'pending',
+            'running',
+            'finished',
+            'successful',
+            'unsuccessful',
+            ]:
+            assert getattr(stateful, prop) == (prop in expected_true_properties)
