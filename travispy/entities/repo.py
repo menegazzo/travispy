@@ -55,6 +55,8 @@ class Repo(Stateful):
     @property
     def state(self):
         '''
-        This property must be overiden as soon as support to load "lazy" information is implemented.
+        :class:`.Repo` state is given through ``last_build_state``.
+
+        .. seealso:: :class:`.Stateful` for ``state`` full documentation.
         '''
-        return self.CREATED
+        return self.last_build_state
