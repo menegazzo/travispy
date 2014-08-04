@@ -8,8 +8,23 @@ from ._entity import Entity
 class Stateful(Entity):
     '''
     Base class for stateful entities such as :class:`.Repo`, :class:`.Build` and :class:`.Job`.
+
+    :ivar str state:
+        Current state. Possible values are:
+
+            - created
+            - queued
+            - started
+            - passed
+            - failed
+            - errored
+            - canceled
+            - ready
     '''
-    
+
+    __slots__ = ['state']
+
+    # States ---------------------------------------------------------------------------------------
     CANCELED = 'canceled'
     CREATED = 'created'
     ERRORED = 'errored'
@@ -18,36 +33,53 @@ class Stateful(Entity):
     QUEUED = 'queued'
     READY = 'ready'
     STARTED = 'started'
-    
-    STATES = [
-        'canceled',
-        'created',
-        'errored',
-        'failed',
-        'passed',
-        'queued',
-        'ready',
-        'started',
-    ]
 
-    __slots__ = [
-        'created?',
-        'errored?',
-        'failed?',
-        'finished?',
-        'green?',
-        'passed?',
-        'pending?',
-        'queued?',
-        'red?',
-        'running?',
-        'started?',
-        'successful?',
-        'unsuccessful?',
-        'yellow?',
-        'color',
-        'state',
-    ]
+    # Colors ---------------------------------------------------------------------------------------
+    GREEN = 'green'
+    YELLOW = 'yellow'
+    RED = 'red'
+
+    @property
+    def created(self):
+        self._check_state()
+        return hasattr(self, 'state')
+
+
+    @property
+    def queued(self):
+        self._check_state()
+        return self.state != self.CREATED
+
+
+    @property
+    def started(self):
+        self._check_state()
+        return self.state not in [self.CREATED, self.QUEUED]
+
+
+    @property
+    def passed(self):
+        self._check_state()
+        return self.state == self.PASSED
+
+
+    @property
+    def failed(self):
+        self._check_state()
+        return self.state == self.FAILED
+
+
+    @property
+    def errored(self):
+        self._check_state()
+        return self.state == self.ERRORED
+
+
+    @property
+    def canceled(self):
+        self._check_state()
+        return self.state == self.CANCELED
+
 
     @property
     def ready(self):
@@ -56,17 +88,13 @@ class Stateful(Entity):
 
     @property
     def pending(self):
+        self._check_state()
         return self.state in [self.CREATED, self.STARTED, self.QUEUED]
 
 
     @property
-    def started(self):
-        return self.state not in [self.CREATED, self.QUEUED]
-
-
-    @property
-    def queued(self):
-        return self.state != self.CREATED
+    def running(self):
+        return self.state == self.STARTED
 
 
     @property
@@ -75,25 +103,51 @@ class Stateful(Entity):
 
 
     @property
-    def passed(self):
-        return self.state == self.PASSED
-
-
-    @property
-    def errored(self):
-        return self.state == self.ERRORED
-
-
-    @property
-    def failed(self):
-        return self.state == self.FAILED
-
-
-    @property
-    def canceled(self):
-        return self.state == self.CANCELED
+    def successful(self):
+        return self.passed
 
 
     @property
     def unsuccessful(self):
         return self.errored or self.failed or self.canceled
+
+
+    @property
+    def color(self):
+        self._check_state()
+        if self.passed or self.ready:
+            return self.GREEN
+
+        elif self.pending:
+            return self.YELLOW
+
+        elif self.unsuccessful:
+            return self.RED
+
+
+    @property
+    def green(self):
+        return self.color == self.GREEN
+
+
+    @property
+    def yellow(self):
+        return self.color == self.YELLOW
+
+
+    @property
+    def red(self):
+        return self.color == self.RED
+
+    def _check_state(self):
+        if self.state not in [
+            self.CANCELED,
+            self.CREATED,
+            self.ERRORED,
+            self.FAILED,
+            self.PASSED,
+            self.QUEUED,
+            self.READY,
+            self.STARTED,
+            ]:
+            raise ValueError('unknown state %s for %s' % (self.state, self.__class__.__name__))

@@ -25,9 +25,6 @@ class Job(Restartable):
     :ivar dict config:
         Job config (secure values and ssh key removed). It comes from ``.travis.yml`` file.
 
-    :ivar str state:
-        Job state.
-
     :ivar str started_at:
         Time the job was started.
 

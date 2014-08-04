@@ -10,10 +10,6 @@ class Restartable(Stateful):
     Base class for restartable entities such as :class:`.Build` and :class:`.Job`.
     '''
 
-    __slots__ = [
-        'state',
-    ]
-
     def cancel(self):
         '''
         Method responsible for canceling current action of this object.

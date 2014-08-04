@@ -28,9 +28,6 @@ class Build(Restartable):
     :ivar dict config:
         Build config (secure values and ssh key removed). It comes from ``.travis.yml`` file.
 
-    :ivar str state:
-        Build state.
-
     :ivar str started_at:
         Time the build was started.
 
@@ -53,7 +50,6 @@ class Build(Restartable):
         'pull_request_title',
         'pull_request_number',
         'config',
-        'state',
         'started_at',
         'finished_at',
         'duration',
