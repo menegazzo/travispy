@@ -1,6 +1,12 @@
 Changes
 =======
 
+v0.2.0 (2014-08-05)
+-------------------
+
+* Added support for loading objects from lazy information
+* Now Repo, Build and Job entities are stateful
+
 v0.1.1 (2014-06-30)
 -------------------
 

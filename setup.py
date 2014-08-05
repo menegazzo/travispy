@@ -24,7 +24,7 @@ class PyTest(TestCommand):
 
 setup(
     name='TravisPy',
-    version='0.1.1',
+    version='0.2.0',
     packages=['travispy', 'travispy.entities'],
     install_requires=[x.strip() for x in open('requirements.txt')],
 
