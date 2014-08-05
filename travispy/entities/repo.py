@@ -60,3 +60,14 @@ class Repo(Stateful):
         .. seealso:: :class:`.Stateful` for ``state`` full documentation.
         '''
         return self.last_build_state
+
+
+    @property
+    def last_build(self):
+        '''
+        :rtype: :class:`.Build`
+        :returns:
+            A :class:`.Build` object with information related to current ``last_build_id``.
+        '''
+        from .build import Build
+        return self._load_one_lazy_information(Build, 'last_build_id')
