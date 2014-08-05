@@ -36,9 +36,13 @@ class Session(requests.Session):
         if response.status_code == 200:
             contents = response.json()
             info = contents.get(entity_class.one(), {})
+            if not info:
+                return
+
             entity = entity_class(self)
             for key, value in info.items():
                 setattr(entity, key, value)
+
             return entity
 
 

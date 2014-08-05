@@ -1,5 +1,5 @@
 from travispy import TravisPy
-from travispy.entities import User
+from travispy.entities import Build, Job, Log, Repo, User
 import os
 import pytest
 
@@ -97,6 +97,28 @@ class Test:
         assert build.restart() == True
         assert build.cancel() == True
 
+        repository = build.repository
+        assert isinstance(repository, Repo)
+        assert build.repository_id == repository.id
+        assert repository == build.repository
+
+        build.repository_id = -1
+        assert build.repository == None
+
+        jobs = build.jobs
+        assert isinstance(jobs, list)
+
+        job_ids = []
+        for job in jobs:
+            assert isinstance(job, Job)
+            job_ids.append(job.id)
+
+        assert build.job_ids == job_ids
+        assert jobs == build.jobs
+
+        build.job_ids = [-1]
+        assert build.jobs == []
+
 
     def test_hooks(self):
         hooks = self._travis.hooks()
@@ -137,12 +159,44 @@ class Test:
         assert job.restart() == True
         assert job.cancel() == True
 
+        build = job.build
+        assert isinstance(build, Build)
+        assert job.build_id == build.id
+        assert build == job.build
+
+        job.build_id = -1
+        assert job.build == None
+
+        repository = job.repository
+        assert isinstance(repository, Repo)
+        assert job.repository_id == repository.id
+        assert repository == job.repository
+
+        job.repository_id = -1
+        assert job.repository == None
+
+        log = job.log
+        assert isinstance(log, Log)
+        assert job.log_id == log.id
+        assert log == job.log
+
+        job.log_id = -1
+        assert job.log == None
+
 
     def test_log(self):
         log = self._travis.log(15928905)
         assert log.id == 15928905
         assert log.job_id == 25718104
         assert hasattr(log, 'body')
+
+        job = log.job
+        assert isinstance(job, Job)
+        assert log.job_id == job.id
+        assert job == log.job
+
+        log.job_id = -1
+        assert log.job == None
 
 
     def test_repos(self, repo_slug):
@@ -167,6 +221,14 @@ class Test:
         assert hasattr(repo, 'last_build_started_at')
         assert hasattr(repo, 'last_build_finished_at')
         assert repo.state == repo.last_build_state
+
+        last_build = repo.last_build
+        assert isinstance(last_build, Build)
+        assert last_build.repository_id == repo.id
+        assert last_build == repo.last_build
+
+        repo.last_build_id = -1
+        assert repo.last_build == None
 
 
     def test_user(self):

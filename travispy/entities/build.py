@@ -55,3 +55,24 @@ class Build(Restartable):
         'duration',
         'job_ids',
     ]
+
+    @property
+    def repository(self):
+        '''
+        :rtype: :class:`.Repo`
+        :returns:
+            A :class:`.Repo` object with information related to current ``repository_id``.
+        '''
+        from .repo import Repo
+        return self._load_one_lazy_information(Repo, 'repository_id')
+
+
+    @property
+    def jobs(self):
+        '''
+        :rtype: list(:class:`.Job`)
+        :returns:
+            A list of :class:`.Job` objects with information related to current ``job_ids``.
+        '''
+        from .job import Job
+        return self._load_many_lazy_information(Job)

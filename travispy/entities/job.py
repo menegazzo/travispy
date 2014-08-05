@@ -59,3 +59,35 @@ class Job(Restartable):
         'allow_failure',
         'annotation_ids',
     ]
+
+    @property
+    def build(self):
+        '''
+        :rtype: :class:`.Build`
+        :returns:
+            A :class:`.Build` object with information related to current ``build_id``.
+        '''
+        from .build import Build
+        return self._load_one_lazy_information(Build)
+
+
+    @property
+    def repository(self):
+        '''
+        :rtype: :class:`.Repo`
+        :returns:
+            A :class:`.Repo` object with information related to current ``repository_id``.
+        '''
+        from .repo import Repo
+        return self._load_one_lazy_information(Repo, 'repository_id')
+
+
+    @property
+    def log(self):
+        '''
+        :rtype: :class:`.Log`
+        :returns:
+            A :class:`.Log` object with information related to current ``log_id``.
+        '''
+        from .log import Log
+        return self._load_one_lazy_information(Log)
