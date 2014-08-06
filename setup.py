@@ -35,7 +35,7 @@ setup(
     long_description=open('README.rst').read(),
     license='GPL',
     keywords='travis ci continuous integration travisci',
-    url='http://menegazzo.github.io/travispy/',
+    url='https://github.com/menegazzo/travispy',
 
     classifiers=[
         'Development Status :: 3 - Alpha',
