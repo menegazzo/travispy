@@ -2,3 +2,5 @@
 .tox/
 *.egg*/
 _build/
+.project
+.pydevproject
