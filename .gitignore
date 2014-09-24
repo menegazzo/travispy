@@ -4,3 +4,5 @@
 _build/
 .project
 .pydevproject
+.coverage
+.cache/
