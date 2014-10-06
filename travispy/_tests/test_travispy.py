@@ -69,14 +69,14 @@ class Test:
         pytest.raises(RuntimeError, self._travis.builds)
 
         builds = self._travis.builds(slug=repo_slug)
-        assert len(builds) == 1
+        assert len(builds) == 2
 
         repo = self._travis.repo(repo_slug)
         build_id = builds[0].id
         build = self._travis.build(build_id)
         assert build.id == build_id
         assert build.repository_id == repo.id
-        assert build.number == '1'
+        assert build.number == '2'
         assert build.pull_request == False
         assert build.pull_request_title == None
         assert build.pull_request_number == None
@@ -140,7 +140,7 @@ class Test:
         job = self._travis.job(build.job_ids[0])
         assert job.build_id == build_id
         assert job.repository_id == repo.id
-        assert job.number == '1.1'
+        assert job.number == '2.1'
         assert job.config == {
             '.result': 'configured',
             'language': 'python',

@@ -90,7 +90,7 @@ class TravisPy:
         .. note::
             This request always needs to be authenticated.
         '''
-        return self._session.find_many(Account, all=all)
+        return Account.find_many(self._session, all=all)
 
 
     def account(self, account_id):
@@ -116,7 +116,7 @@ class TravisPy:
         .. note::
             This request always needs to be authenticated.
         '''
-        return self._session.find_many(Broadcast)
+        return Broadcast.find_many(self._session)
 
 
     # Builds ---------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ class TravisPy:
         else:
             raise RuntimeError('You have to supply either "ids", "repository_id" or "slug".')
 
-        return self._session.find_many(Build, **kwargs)
+        return Build.find_many(self._session, **kwargs)
 
 
     def build(self, build_id):
@@ -163,7 +163,7 @@ class TravisPy:
 
         :rtype: :class:`.Build`
         '''
-        return self._session.find_one(Build, build_id)
+        return Build.find_one(self._session, build_id)
 
 
     # Hooks ----------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ class TravisPy:
         .. note::
             This request always needs to be authenticated.
         '''
-        return self._session.find_many(Hook)
+        return Hook.find_many(self._session)
 
 
     # Jobs -----------------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ class TravisPy:
         if len(provided_required_parameters) != 1:
             raise RuntimeError('You need to provide exactly one of the following parameters: "ids", "state" or "queue".')
 
-        return self._session.find_many(Job, **kwargs)
+        return Job.find_many(self._session, **kwargs)
 
 
     def job(self, job_id):
@@ -218,7 +218,7 @@ class TravisPy:
 
         :rtype: :class:`.Job`
         '''
-        return self._session.find_one(Job, job_id)
+        return Job.find_one(self._session, job_id)
 
 
     # Log ------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ class TravisPy:
 
         :rtype: :class:`.Log`
         '''
-        return self._session.find_one(Log, log_id)
+        return Log.find_one(self._session, log_id)
 
 
     # Repositories ---------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ class TravisPy:
         .. note::
             If no parameters are given, a list of repositories with recent activity is returned.
         '''
-        return self._session.find_many(Repo, **kwargs)
+        return Repo.find_many(self._session, **kwargs)
 
 
     def repo(self, id_or_slug):
@@ -269,7 +269,7 @@ class TravisPy:
 
         :rtype: :class:`.Repo`
         '''
-        return self._session.find_one(Repo, id_or_slug)
+        return Repo.find_one(self._session, id_or_slug)
 
 
     # Users ----------------------------------------------------------------------------------------
@@ -282,4 +282,4 @@ class TravisPy:
         .. note::
             This request always needs to be authenticated.
         '''
-        return self._session.find_one(User, '')
+        return User.find_one(self._session, '')

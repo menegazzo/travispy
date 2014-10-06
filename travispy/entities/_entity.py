@@ -48,7 +48,63 @@ class Entity(object):
         return cls.one() + 's'
 
 
-    def _load_from_lazy_information(self, lazy_information, entity_class, cache_name, load_method, load_kwarg):
+    @classmethod
+    def find_one(cls, session, entity_id, **kwargs):
+        '''
+        Method responsible for returning exactly one instance of current class.
+
+        :type session: :class:`.Session`
+        :param session:
+            Session that must be used to search for result.
+
+        :param int entity_id:
+            The ID of the entity.
+
+        :rtype: :class:`.Entity`
+        '''
+        response = session.get(session.uri + '/%s/%s' % (cls.many(), str(entity_id)))
+
+        if response.status_code == 200:
+            contents = response.json()
+            info = contents.get(cls.one(), {})
+            if not info:
+                return
+
+            entity = cls(session)
+            for key, value in info.items():
+                setattr(entity, key, value)
+
+            return entity
+
+
+    @classmethod
+    def find_many(cls, session, **kwargs):
+        '''
+        Method responsible for returning as many as possible matches for current class.
+
+        :type session: :class:`.Session`
+        :param session:
+            Session that must be used to search for results.
+
+        :rtype: list(:class:`.Entity`)
+        '''
+        command = cls.many()
+        response = session.get(session.uri + '/%s' % command, params=kwargs)
+
+        result = []
+        if response.status_code == 200:
+            contents = response.json()
+            info = contents.get(command, [])
+            for i in info:
+                entity = cls(session)
+                for key, value in i.items():
+                    setattr(entity, key, value)
+                result.append(entity)
+
+        return result
+
+
+    def _load_from_lazy_information(self, lazy_information, cache_name, load_method, load_kwarg):
         '''
         Some |travisci| entities stores lazy information (or references) to other entities that they
         have a relationship. Consider :class:`.Build`: it has a reference to its :class:`.Repo`
@@ -56,18 +112,14 @@ class Entity(object):
         within it (through ``job_ids``).
 
         This method is responsible for loading a requested ``lazy_information`` and returning it as
-        objects of the given ``entity_class``. Also it creates an internal cache so if it is
-        requested more than once, the same result will be returned.
+        objects. Also it creates an internal cache so if it is requested more than once, the same
+        result will be returned.
 
         Cache will be updated whenever attribute related to the given ``lazy_information`` is
         changed.
 
         :param str lazy_information:
             Attribute name where lazy information is stored.
-
-        :type entity_class: :class:`.Entity`
-        :param entity_class:
-            Class of entity which will be loaded from lazy information.
 
         :param str cache_name:
             Name that will be used to store loaded information.
@@ -79,16 +131,18 @@ class Entity(object):
             Method or function that will be used to load lazy information. It must support two
             parameters:
 
-                * given ``entity_class``
+                * :class:`.Session` object (which will be the same as its "parent")
                 * ``load_kwarg`` which will receive the stored lazy information
 
         :param str load_kwarg:
             Name of keyword argument that will be used within ``load_method``.
 
-        :rtype: ``entity_class`` instance | list(``entity_class`` instance)
         :returns:
             The information loaded from stored lazy information. The return type will vary depending
             on what ``load_method`` returns.
+
+        .. seealso:: :meth:`.find_one`
+        .. seealso:: :meth:`.find_many`
         '''
         cache = self.__cache
 
@@ -99,7 +153,7 @@ class Entity(object):
         if cache.get(cached_property_ref_name) == property_ref:
             return cache[cached_property_name]
 
-        result = load_method(entity_class, **{load_kwarg: property_ref})
+        result = load_method(self._session, **{load_kwarg: property_ref})
 
         # If no result was found, current cache will be deleted.
         if not result:
@@ -138,9 +192,8 @@ class Entity(object):
 
         return self._load_from_lazy_information(
             lazy_information,
-            entity_class,
             entity_class.one(),
-            self._session.find_one,
+            entity_class.find_one,
             'entity_id',
         )
 
@@ -165,9 +218,8 @@ class Entity(object):
 
         return self._load_from_lazy_information(
             lazy_information,
-            entity_class,
             entity_class.many(),
-            self._session.find_many,
+            entity_class.find_many,
             'ids',
         )
 
