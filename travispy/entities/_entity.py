@@ -62,19 +62,35 @@ class Entity(object):
 
         :rtype: :class:`.Entity`
         '''
+        from travispy.entities import COMMAND_TO_ENTITY
+
+        command = cls.one()
         response = session.get(session.uri + '/%s/%s' % (cls.many(), str(entity_id)))
 
         if response.status_code == 200:
             contents = response.json()
-            info = contents.get(cls.one(), {})
-            if not info:
+
+            if command not in contents:
                 return
 
-            entity = cls(session)
-            for key, value in info.items():
-                setattr(entity, key, value)
+            info = contents.pop(command, {})
+            result = cls._load(info, session)[0]
 
-            return entity
+            for name in contents.keys():
+                infos = contents.pop(name)
+
+                # Unknown entity.
+                if name not in COMMAND_TO_ENTITY:
+                    continue
+
+                entity_class = COMMAND_TO_ENTITY[name]
+                dependency = entity_class._load(infos, session)
+                if name == entity_class.one():
+                    dependency = dependency[0]
+                
+                setattr(result, name, dependency)
+
+            return result
 
 
     @classmethod
@@ -88,23 +104,82 @@ class Entity(object):
 
         :rtype: list(:class:`.Entity`)
         '''
+        from travispy.entities import COMMAND_TO_ENTITY
+
         command = cls.many()
         response = session.get(session.uri + '/%s' % command, params=kwargs)
 
         result = []
+        dependencies_result = {}
+
+        # Retrieving information from Travis and loading into respective classes.
         if response.status_code == 200:
             contents = response.json()
-            info = contents.get(command, [])
-            for i in info:
-                entity = cls(session)
-                for key, value in i.items():
-                    setattr(entity, key, value)
-                result.append(entity)
+
+            if command not in contents:
+                return result
+
+            infos = contents.pop(command, [])
+            result = cls._load(infos, session)
+
+            for name in contents.keys():
+                infos = contents.pop(name)
+
+                # Unknown entity.
+                if name not in COMMAND_TO_ENTITY:
+                    continue
+
+                entity_class = COMMAND_TO_ENTITY[name]
+                dependencies_result[entity_class.one()] = entity_class._load(infos, session)
+
+            assert len(contents) == 0
+        
+        # Injecting dependencies into main objects.
+        for i, entity in enumerate(result):
+            for dependency_name, dependencies in dependencies_result.items():
+                setattr(entity, dependency_name, dependencies[i])
+
+        return result
+    
+    
+    @classmethod
+    def _load(cls, infos, session):
+        '''
+        Method responsible for creating objects of current class using given ``infos``
+        to fill them.
+
+        :type infos: dict | list(dict)
+        :param infos:
+            JSON information returned by Travis API.
+
+        :param :class:`.Session` session:
+            Session that must be given to created objects.
+
+        :rtype: list(:class:`.Entity`)
+        :returns:
+            List of object filled with given ``infos``.
+        '''
+        if not isinstance(infos, list):
+            infos = [infos]
+
+        for info in infos:
+            if not isinstance(info, dict):
+                raise TypeError(
+                    'Unexpected information type. '
+                    'Valid types are dict or list of dicts.'
+                )
+
+        result = []
+        for info in infos:
+            entity = cls(session)
+            for key, value in info.items():
+                setattr(entity, key, value)
+            result.append(entity)
 
         return result
 
 
-    def _load_from_lazy_information(self, lazy_information, cache_name, load_method, load_kwarg):
+    def _load_lazy_information(self, lazy_information, cache_name, load_method, load_kwarg):
         '''
         Some |travisci| entities stores lazy information (or references) to other entities that they
         have a relationship. Consider :class:`.Build`: it has a reference to its :class:`.Repo`
@@ -179,18 +254,18 @@ class Entity(object):
         :type lazy_information: str | None
         :param lazy_information:
             When lazy information is not provided it will be built automatically based on given
-            `` entity_class``. See more at :meth:`._load_from_lazy_information`.
+            `` entity_class``. See more at :meth:`._load_lazy_information`.
 
         :rtype: ``entity_class`` instance
         :returns:
             The information loaded from stored lazy information.
 
-        .. seealso:: :meth:`._load_from_lazy_information`
+        .. seealso:: :meth:`._load_lazy_information`
         '''
         if lazy_information is None:
             lazy_information = '%s_id' % entity_class.one()
 
-        return self._load_from_lazy_information(
+        return self._load_lazy_information(
             lazy_information,
             entity_class.one(),
             entity_class.find_one,
@@ -205,18 +280,18 @@ class Entity(object):
         :type lazy_information: str | None
         :param lazy_information:
             When lazy information is not provided it will be built automatically based on given
-            `` entity_class``. See more at :meth:`._load_from_lazy_information`.
+            `` entity_class``. See more at :meth:`._load_lazy_information`.
 
         :rtype: list(``entity_class`` instance)
         :returns:
             The information loaded from stored lazy information.
 
-        .. seealso:: :meth:`._load_from_lazy_information`
+        .. seealso:: :meth:`._load_lazy_information`
         '''
         if lazy_information is None:
             lazy_information = '%s_ids' % entity_class.one()
 
-        return self._load_from_lazy_information(
+        return self._load_lazy_information(
             lazy_information,
             entity_class.many(),
             entity_class.find_many,

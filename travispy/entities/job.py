@@ -43,6 +43,9 @@ class Job(Restartable):
 
     :ivar list(int) annotation_ids:
         List of annotation IDs.
+
+    :ivar :class:`.Commit` commit:
+        Commit information.
     '''
 
     __slots__ = [
@@ -58,6 +61,7 @@ class Job(Restartable):
         'queue',
         'allow_failure',
         'annotation_ids',
+        'commit',
     ]
 
     @property

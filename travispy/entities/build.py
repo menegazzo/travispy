@@ -40,6 +40,12 @@ class Build(Restartable):
 
     :ivar list(int) job_ids:
         List of job IDs in the build matrix.
+
+    :ivar list(:class:`.Job`) jobs:
+        List of jobs in the build matrix.
+
+    :ivar :class:`.Commit` commit:
+        Commit information.
     '''
 
     __slots__ = [
@@ -54,6 +60,8 @@ class Build(Restartable):
         'finished_at',
         'duration',
         'job_ids',
+        'jobs',
+        'commit',
     ]
 
     @property
@@ -65,14 +73,3 @@ class Build(Restartable):
         '''
         from .repo import Repo
         return self._load_one_lazy_information(Repo, 'repository_id')
-
-
-    @property
-    def jobs(self):
-        '''
-        :rtype: list(:class:`.Job`)
-        :returns:
-            A list of :class:`.Job` objects with information related to current ``job_ids``.
-        '''
-        from .job import Job
-        return self._load_many_lazy_information(Job)

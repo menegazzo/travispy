@@ -93,6 +93,9 @@ class Test:
         assert hasattr(build, 'finished_at')
         assert hasattr(build, 'duration')
         assert hasattr(build, 'job_ids')
+        assert hasattr(build, 'commit')
+        
+        assert build.commit_id == build.commit.id
 
         assert build.restart() == True
         assert build.cancel() == True
@@ -115,9 +118,27 @@ class Test:
 
         assert build.job_ids == job_ids
         assert jobs == build.jobs
+    
+    
+    def test_commit(self, repo_slug):
+        builds = self._travis.builds(slug=repo_slug)
 
-        build.job_ids = [-1]
-        assert build.jobs == []
+        build = builds[0]
+        assert hasattr(build, 'commit')
+
+        commit = build.commit
+        assert hasattr(commit, 'id')
+        assert hasattr(commit, 'sha')
+        assert hasattr(commit, 'branch')
+        assert hasattr(commit, 'message')
+        assert hasattr(commit, 'committed_at')
+        assert hasattr(commit, 'author_name')
+        assert hasattr(commit, 'author_email')
+        assert hasattr(commit, 'committer_name')
+        assert hasattr(commit, 'committer_email')
+        assert hasattr(commit, 'compare_url')
+        assert hasattr(commit, 'tag')
+        assert hasattr(commit, 'pull_request_number')
 
 
     def test_hooks(self):
@@ -155,6 +176,9 @@ class Test:
         assert job.queue == 'builds.linux'
         assert job.allow_failure == False
         assert job.annotation_ids == []
+        assert hasattr(job, 'commit')
+
+        assert job.commit_id == job.commit.id
 
         assert job.restart() == True
         assert job.cancel() == True
