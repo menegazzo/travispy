@@ -147,18 +147,10 @@ class Entity(object):
         if response.status_code == 200:
             contents = response.json()
 
-            if command not in contents:
-                return result
-
             infos = contents.pop(command, [])
             result = cls._load(infos, session)
 
             for name in contents.keys():
-
-                # Unknown entity.
-                if name not in COMMAND_TO_ENTITY:
-                    continue
-
                 entity_class = COMMAND_TO_ENTITY[name]
                 dependencies_result[entity_class.one()] = entity_class._load(contents[name], session)
         
@@ -189,13 +181,6 @@ class Entity(object):
         '''
         if not isinstance(infos, list):
             infos = [infos]
-
-        for info in infos:
-            if not isinstance(info, dict):
-                raise TypeError(
-                    'Unexpected information type. '
-                    'Valid types are dict or list of dicts.'
-                )
 
         result = []
         for info in infos:

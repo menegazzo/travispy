@@ -79,7 +79,5 @@ class Branch(Stateful):
 
     @classmethod
     def _find_one_command(cls, command, entity_id, **kwargs):
-        repo_id_or_slug = kwargs.pop('repo_id_or_slug')
-        if repo_id_or_slug is None:
-            raise RuntimeError('You have to supply "repo_id_or_slug".')
+        repo_id_or_slug = kwargs['repo_id_or_slug']
         return '/repos/%s/%s/%s' % (repo_id_or_slug, cls.many(), entity_id)
