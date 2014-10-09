@@ -1,4 +1,5 @@
 from .account import Account
+from .branch import Branch
 from .broadcast import Broadcast
 from .build import Build
 from .commit import Commit
@@ -13,6 +14,9 @@ from .user import User
 COMMAND_TO_ENTITY = {
     Account.many(): Account,
     Account.one(): Account,
+
+    Branch.many(): Branch,
+    Branch.one(): Branch,
 
     Broadcast.many(): Broadcast,
     Broadcast.one(): Broadcast,

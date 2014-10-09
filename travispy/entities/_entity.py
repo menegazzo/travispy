@@ -49,6 +49,23 @@ class Entity(object):
 
 
     @classmethod
+    def _find_one_command(cls, command, entity_id, **kwargs):
+        '''
+        :param str command:
+            Command name.
+
+        :type entity_id: int | str
+        :param entity_id:
+            Entity identification.
+
+        :rtype: str
+        :returns:
+            API command for retrieving one object.
+        '''
+        return '/%s/%s' % (command, entity_id,)
+
+
+    @classmethod
     def find_one(cls, session, entity_id, **kwargs):
         '''
         Method responsible for returning exactly one instance of current class.
@@ -65,7 +82,10 @@ class Entity(object):
         from travispy.entities import COMMAND_TO_ENTITY
 
         command = cls.one()
-        response = session.get(session.uri + '/%s/%s' % (cls.many(), str(entity_id)))
+        response = session.get(
+            session.uri +
+            cls._find_one_command(cls.many(), str(entity_id), **kwargs)
+        )
 
         if response.status_code == 200:
             contents = response.json()
@@ -92,6 +112,9 @@ class Entity(object):
 
             return result
 
+    # Constant that holds parameter names that should be exclusive.
+    # That means no more than one of these values may be given.
+    _FIND_MANY_EXCLUSIVE_PARAMETERS = []
 
     @classmethod
     def find_many(cls, session, **kwargs):
@@ -105,6 +128,15 @@ class Entity(object):
         :rtype: list(:class:`.Entity`)
         '''
         from travispy.entities import COMMAND_TO_ENTITY
+
+        count = 0
+        for param in cls._FIND_MANY_EXCLUSIVE_PARAMETERS:
+            if param in kwargs:
+                count += 1
+        
+        if count != 1 and len(cls._FIND_MANY_EXCLUSIVE_PARAMETERS) > 0:
+            exclusive_parameters = '", "'.join(cls._FIND_MANY_EXCLUSIVE_PARAMETERS)
+            raise RuntimeError('You have to supply either "%s".' % exclusive_parameters)
 
         command = cls.many()
         response = session.get(session.uri + '/%s' % command, params=kwargs)

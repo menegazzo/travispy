@@ -64,6 +64,8 @@ class Job(Restartable):
         'commit',
     ]
 
+    _FIND_MANY_EXCLUSIVE_PARAMETERS = ['ids', 'state', 'queue']
+
     @property
     def build(self):
         '''

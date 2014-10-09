@@ -1,11 +1,10 @@
-from ._restartable import Restartable
-
+from ._stateful import Stateful
 
 
 #===================================================================================================
-# Build
+# Branch
 #===================================================================================================
-class Build(Restartable):
+class Branch(Stateful):
     '''
     :ivar int repository_id:
         Repository ID.
@@ -15,15 +14,6 @@ class Build(Restartable):
 
     :ivar str number:
         Build number.
-
-    :ivar bool pull_request:
-        Whether or not the build comes from a pull request.
-
-    :ivar str pull_request_title:
-        PR title if :attr:`pull_request` is ``True``.
-
-    :ivar str pull_request_number:
-        PR number if :attr:`pull_request` is ``True``.
 
     :ivar dict config:
         Build config (secure values and ssh key removed). It comes from ``.travis.yml`` file.
@@ -41,8 +31,8 @@ class Build(Restartable):
     :ivar list(int) job_ids:
         List of job IDs in the build matrix.
 
-    :ivar list(:class:`.Job`) jobs:
-        List of jobs in the build matrix.
+    :ivar bool pull_request:
+        Whether or not the build comes from a pull request.
 
     :ivar :class:`.Commit` commit:
         Commit information.
@@ -52,19 +42,14 @@ class Build(Restartable):
         'repository_id',
         'commit_id',
         'number',
-        'pull_request',
-        'pull_request_title',
-        'pull_request_number',
         'config',
         'started_at',
         'finished_at',
         'duration',
         'job_ids',
-        'jobs',
+        'pull_request',
         'commit',
     ]
-
-    _FIND_MANY_EXCLUSIVE_PARAMETERS = ['ids', 'repository_id', 'slug']
 
     @property
     def repository(self):
@@ -75,3 +60,26 @@ class Build(Restartable):
         '''
         from .repo import Repo
         return self._load_one_lazy_information(Repo, 'repository_id')
+
+    @property
+    def jobs(self):
+        '''
+        :rtype: list(:class:`.Job`)
+        :returns:
+            A list of :class:`.Job` objects with information related to current ``job_ids``.
+        '''
+        from .job import Job
+        return self._load_many_lazy_information(Job)
+
+    _FIND_MANY_EXCLUSIVE_PARAMETERS = ['repository_id', 'slug']
+
+    @classmethod
+    def many(cls):
+        return 'branches'
+
+    @classmethod
+    def _find_one_command(cls, command, entity_id, **kwargs):
+        repo_id_or_slug = kwargs.pop('repo_id_or_slug')
+        if repo_id_or_slug is None:
+            raise RuntimeError('You have to supply "repo_id_or_slug".')
+        return '/repos/%s/%s/%s' % (repo_id_or_slug, cls.many(), entity_id)

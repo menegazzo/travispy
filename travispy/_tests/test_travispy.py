@@ -60,6 +60,55 @@ class Test:
         assert account is None
 
 
+    def test_branches(self, python_version, repo_slug):
+        pytest.raises(RuntimeError, self._travis.branches)
+
+        branches = self._travis.branches(slug=repo_slug)
+        assert len(branches) == 2
+
+        repo = self._travis.repo(repo_slug)
+        branch = self._travis.branch('master', repo_slug)
+        assert branch.id == branches[-1].id
+        assert branch.repository_id == repo.id
+        assert branch.number == '1'
+        assert branch.pull_request == False
+        assert branch.config == {
+            '.result': 'configured',
+            'os': 'linux',
+            'language': 'python',
+            'python': [python_version],
+            'script': ['py.test'],
+        }
+        assert hasattr(branch, 'commit_id')
+        assert hasattr(branch, 'state')
+        assert hasattr(branch, 'started_at')
+        assert hasattr(branch, 'finished_at')
+        assert hasattr(branch, 'duration')
+        assert hasattr(branch, 'job_ids')
+        assert hasattr(branch, 'commit')
+
+        assert branch.commit_id == branch.commit.id
+
+        repository = branch.repository
+        assert isinstance(repository, Repo)
+        assert branch.repository_id == repository.id
+        assert repository == branch.repository
+
+        branch.repository_id = -1
+        assert branch.repository == None
+
+        jobs = branch.jobs
+        assert isinstance(jobs, list)
+
+        job_ids = []
+        for job in jobs:
+            assert isinstance(job, Job)
+            job_ids.append(job.id)
+
+        assert branch.job_ids == job_ids
+        assert jobs == branch.jobs
+
+
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
         assert len(broadcasts) == 0
