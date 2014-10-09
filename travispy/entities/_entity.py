@@ -97,14 +97,13 @@ class Entity(object):
             result = cls._load(info, session)[0]
 
             for name in contents.keys():
-                infos = contents.pop(name)
 
                 # Unknown entity.
                 if name not in COMMAND_TO_ENTITY:
                     continue
 
                 entity_class = COMMAND_TO_ENTITY[name]
-                dependency = entity_class._load(infos, session)
+                dependency = entity_class._load(contents[name], session)
                 if name == entity_class.one():
                     dependency = dependency[0]
                 
@@ -155,16 +154,13 @@ class Entity(object):
             result = cls._load(infos, session)
 
             for name in contents.keys():
-                infos = contents.pop(name)
 
                 # Unknown entity.
                 if name not in COMMAND_TO_ENTITY:
                     continue
 
                 entity_class = COMMAND_TO_ENTITY[name]
-                dependencies_result[entity_class.one()] = entity_class._load(infos, session)
-
-            assert len(contents) == 0
+                dependencies_result[entity_class.one()] = entity_class._load(contents[name], session)
         
         # Injecting dependencies into main objects.
         for i, entity in enumerate(result):
