@@ -60,6 +60,55 @@ class Test:
         assert account is None
 
 
+    def test_branches(self, python_version, repo_slug):
+        pytest.raises(RuntimeError, self._travis.branches)
+
+        branches = self._travis.branches(slug=repo_slug)
+        assert len(branches) == 2
+
+        repo = self._travis.repo(repo_slug)
+        branch = self._travis.branch('master', repo_slug)
+        assert branch.id == branches[-1].id
+        assert branch.repository_id == repo.id
+        assert branch.number == '1'
+        assert branch.pull_request == False
+        assert branch.config == {
+            '.result': 'configured',
+            'os': 'linux',
+            'language': 'python',
+            'python': [python_version],
+            'script': ['py.test'],
+        }
+        assert hasattr(branch, 'commit_id')
+        assert hasattr(branch, 'state')
+        assert hasattr(branch, 'started_at')
+        assert hasattr(branch, 'finished_at')
+        assert hasattr(branch, 'duration')
+        assert hasattr(branch, 'job_ids')
+        assert hasattr(branch, 'commit')
+
+        assert branch.commit_id == branch.commit.id
+
+        repository = branch.repository
+        assert isinstance(repository, Repo)
+        assert branch.repository_id == repository.id
+        assert repository == branch.repository
+
+        branch.repository_id = -1
+        assert branch.repository == None
+
+        jobs = branch.jobs
+        assert isinstance(jobs, list)
+
+        job_ids = []
+        for job in jobs:
+            assert isinstance(job, Job)
+            job_ids.append(job.id)
+
+        assert branch.job_ids == job_ids
+        assert jobs == branch.jobs
+
+
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
         assert len(broadcasts) == 0
@@ -69,14 +118,14 @@ class Test:
         pytest.raises(RuntimeError, self._travis.builds)
 
         builds = self._travis.builds(slug=repo_slug)
-        assert len(builds) == 1
+        assert len(builds) == 2
 
         repo = self._travis.repo(repo_slug)
         build_id = builds[0].id
         build = self._travis.build(build_id)
         assert build.id == build_id
         assert build.repository_id == repo.id
-        assert build.number == '1'
+        assert build.number == '2'
         assert build.pull_request == False
         assert build.pull_request_title == None
         assert build.pull_request_number == None
@@ -93,6 +142,9 @@ class Test:
         assert hasattr(build, 'finished_at')
         assert hasattr(build, 'duration')
         assert hasattr(build, 'job_ids')
+        assert hasattr(build, 'commit')
+        
+        assert build.commit_id == build.commit.id
 
         assert build.restart() == True
         assert build.cancel() == True
@@ -115,9 +167,27 @@ class Test:
 
         assert build.job_ids == job_ids
         assert jobs == build.jobs
+    
+    
+    def test_commit(self, repo_slug):
+        builds = self._travis.builds(slug=repo_slug)
 
-        build.job_ids = [-1]
-        assert build.jobs == []
+        build = builds[0]
+        assert hasattr(build, 'commit')
+
+        commit = build.commit
+        assert hasattr(commit, 'id')
+        assert hasattr(commit, 'sha')
+        assert hasattr(commit, 'branch')
+        assert hasattr(commit, 'message')
+        assert hasattr(commit, 'committed_at')
+        assert hasattr(commit, 'author_name')
+        assert hasattr(commit, 'author_email')
+        assert hasattr(commit, 'committer_name')
+        assert hasattr(commit, 'committer_email')
+        assert hasattr(commit, 'compare_url')
+        assert hasattr(commit, 'tag')
+        assert hasattr(commit, 'pull_request_number')
 
 
     def test_hooks(self):
@@ -140,7 +210,7 @@ class Test:
         job = self._travis.job(build.job_ids[0])
         assert job.build_id == build_id
         assert job.repository_id == repo.id
-        assert job.number == '1.1'
+        assert job.number == '2.1'
         assert job.config == {
             '.result': 'configured',
             'language': 'python',
@@ -155,6 +225,9 @@ class Test:
         assert job.queue == 'builds.linux'
         assert job.allow_failure == False
         assert job.annotation_ids == []
+        assert hasattr(job, 'commit')
+
+        assert job.commit_id == job.commit.id
 
         assert job.restart() == True
         assert job.cancel() == True
