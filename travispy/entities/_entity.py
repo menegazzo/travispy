@@ -1,6 +1,3 @@
-#===================================================================================================
-# Entity
-#===================================================================================================
 class Entity(object):
     '''
     Base class for all |travisci| entities.
@@ -25,7 +22,6 @@ class Entity(object):
         # A dictionary used to cache objects loaded from lazy information.
         self.__cache = {}
 
-
     @classmethod
     def one(cls):
         '''
@@ -36,7 +32,6 @@ class Entity(object):
         '''
         return cls.__name__.lower()
 
-
     @classmethod
     def many(cls):
         '''
@@ -46,7 +41,6 @@ class Entity(object):
             Example: for :class:`.Account` will be ``accounts``.
         '''
         return cls.one() + 's'
-
 
     @classmethod
     def _find_one_command(cls, command, entity_id, **kwargs):
@@ -63,7 +57,6 @@ class Entity(object):
             API command for retrieving one object.
         '''
         return '/%s/%s' % (command, entity_id,)
-
 
     @classmethod
     def find_one(cls, session, entity_id, **kwargs):
@@ -106,7 +99,7 @@ class Entity(object):
                 dependency = entity_class._load(contents[name], session)
                 if name == entity_class.one():
                     dependency = dependency[0]
-                
+
                 setattr(result, name, dependency)
 
             return result
@@ -132,7 +125,7 @@ class Entity(object):
         for param in cls._FIND_MANY_EXCLUSIVE_PARAMETERS:
             if param in kwargs:
                 count += 1
-        
+
         if count != 1 and len(cls._FIND_MANY_EXCLUSIVE_PARAMETERS) > 0:
             exclusive_parameters = '", "'.join(cls._FIND_MANY_EXCLUSIVE_PARAMETERS)
             raise RuntimeError('You have to supply either "%s".' % exclusive_parameters)
@@ -152,16 +145,16 @@ class Entity(object):
 
             for name in contents.keys():
                 entity_class = COMMAND_TO_ENTITY[name]
-                dependencies_result[entity_class.one()] = entity_class._load(contents[name], session)
-        
+                dependencies_result[entity_class.one()] = \
+                    entity_class._load(contents[name], session)
+
         # Injecting dependencies into main objects.
         for i, entity in enumerate(result):
             for dependency_name, dependencies in dependencies_result.items():
                 setattr(entity, dependency_name, dependencies[i])
 
         return result
-    
-    
+
     @classmethod
     def _load(cls, infos, session):
         '''
@@ -190,7 +183,6 @@ class Entity(object):
             result.append(entity)
 
         return result
-
 
     def _load_lazy_information(self, lazy_information, cache_name, load_method, load_kwarg):
         '''
@@ -259,7 +251,6 @@ class Entity(object):
 
         return result
 
-
     def _load_one_lazy_information(self, entity_class, lazy_information=None):
         '''
         Method responsible for searching one ``entity_class`` based on related ``lazy_information``.
@@ -285,15 +276,15 @@ class Entity(object):
             'entity_id',
         )
 
-
     def _load_many_lazy_information(self, entity_class, lazy_information=None):
         '''
-        Method responsible for searching many ``entity_class`` based on related ``lazy_information``.
+        Method responsible for searching many ``entity_class`` based on related
+        ``lazy_information``.
 
         :type lazy_information: str | None
         :param lazy_information:
             When lazy information is not provided it will be built automatically based on given
-            `` entity_class``. See more at :meth:`._load_lazy_information`.
+            ``entity_class``. See more at :meth:`._load_lazy_information`.
 
         :rtype: list(``entity_class`` instance)
         :returns:
@@ -310,7 +301,6 @@ class Entity(object):
             entity_class.find_many,
             'ids',
         )
-
 
     def __getitem__(self, key):
         return getattr(self, key)

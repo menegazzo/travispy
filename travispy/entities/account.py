@@ -1,10 +1,6 @@
 from ._entity import Entity
 
 
-
-#===================================================================================================
-# Account
-#===================================================================================================
 class Account(Entity):
     '''
     A user might have access to multiple accounts. This is usually the account corresponding to the

@@ -1,10 +1,6 @@
 from ._entity import Entity
 
 
-
-#===================================================================================================
-# Stateful
-#===================================================================================================
 class Stateful(Entity):
     '''
     Base class for stateful entities such as :class:`.Repo`, :class:`.Build` and :class:`.Job`.
@@ -96,7 +92,6 @@ class Stateful(Entity):
         self.check_state()
         return hasattr(self, 'state')
 
-
     @property
     def queued(self):
         '''
@@ -108,7 +103,6 @@ class Stateful(Entity):
         '''
         self.check_state()
         return self.state != self.CREATED
-
 
     @property
     def started(self):
@@ -122,7 +116,6 @@ class Stateful(Entity):
         self.check_state()
         return self.state not in [self.CREATED, self.QUEUED]
 
-
     @property
     def passed(self):
         '''
@@ -134,7 +127,6 @@ class Stateful(Entity):
         '''
         self.check_state()
         return self.state == self.PASSED
-
 
     @property
     def failed(self):
@@ -148,7 +140,6 @@ class Stateful(Entity):
         self.check_state()
         return self.state == self.FAILED
 
-
     @property
     def errored(self):
         '''
@@ -160,7 +151,6 @@ class Stateful(Entity):
         '''
         self.check_state()
         return self.state == self.ERRORED
-
 
     @property
     def canceled(self):
@@ -174,7 +164,6 @@ class Stateful(Entity):
         self.check_state()
         return self.state == self.CANCELED
 
-
     @property
     def ready(self):
         '''
@@ -186,7 +175,6 @@ class Stateful(Entity):
         '''
         self.check_state()
         return self.state == self.READY
-
 
     @property
     def pending(self):
@@ -200,7 +188,6 @@ class Stateful(Entity):
         self.check_state()
         return self.state in [self.CREATED, self.STARTED, self.QUEUED]
 
-
     @property
     def running(self):
         '''
@@ -213,7 +200,6 @@ class Stateful(Entity):
         self.check_state()
         return self.state == self.STARTED
 
-
     @property
     def finished(self):
         '''
@@ -223,14 +209,12 @@ class Stateful(Entity):
         '''
         return not self.pending
 
-
     @property
     def successful(self):
         '''
         .. seealso:: :attr:`.passed`
         '''
         return self.passed
-
 
     @property
     def unsuccessful(self):
@@ -240,7 +224,6 @@ class Stateful(Entity):
             ``True`` if build process was finished unsuccessfully.
         '''
         return self.errored or self.failed or self.canceled
-
 
     @property
     def color(self):
@@ -262,7 +245,6 @@ class Stateful(Entity):
         elif self.unsuccessful:
             return self.RED
 
-
     @property
     def green(self):
         '''
@@ -271,7 +253,6 @@ class Stateful(Entity):
             ``True`` if build :attr:`.color` is :attr:`.GREEN`.
         '''
         return self.color == self.GREEN
-
 
     @property
     def yellow(self):
@@ -282,7 +263,6 @@ class Stateful(Entity):
         '''
         return self.color == self.YELLOW
 
-
     @property
     def red(self):
         '''
@@ -291,7 +271,6 @@ class Stateful(Entity):
             ``True`` if build :attr:`.color` is :attr:`.RED`.
         '''
         return self.color == self.RED
-
 
     def check_state(self):
         '''
@@ -309,5 +288,5 @@ class Stateful(Entity):
             self.QUEUED,
             self.READY,
             self.STARTED,
-            ]:
+        ]:
             raise ValueError('unknown state %s for %s' % (self.state, self.__class__.__name__))

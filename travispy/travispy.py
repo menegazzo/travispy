@@ -21,9 +21,6 @@ from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, S
 import requests
 
 
-#===================================================================================================
-# TravisPy
-#===================================================================================================
 class TravisPy:
     '''
     Instances of this class are responsible for comunicating with |travisci|, sending requests and
@@ -58,7 +55,6 @@ class TravisPy:
         if token is not None:
             session.headers['Authorization'] = 'token %s' % token
 
-
     @classmethod
     def github_auth(cls, token, uri=PUBLIC):
         '''
@@ -75,8 +71,6 @@ class TravisPy:
             access_token = response.json()['access_token']
             return TravisPy(access_token, uri)
 
-
-    # Accounts -------------------------------------------------------------------------------------
     def accounts(self, all=False):
         '''
         :param bool all:
@@ -92,7 +86,6 @@ class TravisPy:
         '''
         return Account.find_many(self._session, all=all)
 
-
     def account(self, account_id):
         '''
         :param int account_id:
@@ -107,8 +100,6 @@ class TravisPy:
             if account.id == account_id:
                 return account
 
-
-    # Branches -------------------------------------------------------------------------------------
     def branches(self, **kwargs):
         '''
         :keyword int repository_id:
@@ -124,7 +115,6 @@ class TravisPy:
         '''
         return Branch.find_many(self._session, **kwargs)
 
-
     def branch(self, name, repo_id_or_slug, **kwargs):
         '''
         :param str name:
@@ -139,8 +129,6 @@ class TravisPy:
         kwargs['repo_id_or_slug'] = repo_id_or_slug
         return Branch.find_one(self._session, name, **kwargs)
 
-
-    # Broadcasts -----------------------------------------------------------------------------------
     def broadcasts(self):
         '''
         :rtype: list(:class:`.Broadcast`)
@@ -150,8 +138,6 @@ class TravisPy:
         '''
         return Broadcast.find_many(self._session)
 
-
-    # Builds ---------------------------------------------------------------------------------------
     def builds(self, **kwargs):
         '''
         :keyword list(int) ids:
@@ -180,7 +166,6 @@ class TravisPy:
         '''
         return Build.find_many(self._session, **kwargs)
 
-
     def build(self, build_id):
         '''
         :param int build_id:
@@ -190,8 +175,6 @@ class TravisPy:
         '''
         return Build.find_one(self._session, build_id)
 
-
-    # Hooks ----------------------------------------------------------------------------------------
     def hooks(self):
         '''
         :rtype: list(:class:`.Hook`)
@@ -203,8 +186,6 @@ class TravisPy:
         '''
         return Hook.find_many(self._session)
 
-
-    # Jobs -----------------------------------------------------------------------------------------
     def jobs(self, **kwargs):
         '''
         :keyword list(int) ids:
@@ -225,7 +206,6 @@ class TravisPy:
         '''
         return Job.find_many(self._session, **kwargs)
 
-
     def job(self, job_id):
         '''
         :param int job_id:
@@ -235,8 +215,6 @@ class TravisPy:
         '''
         return Job.find_one(self._session, job_id)
 
-
-    # Log ------------------------------------------------------------------------------------------
     def log(self, log_id):
         '''
         :param int log_id:
@@ -246,8 +224,6 @@ class TravisPy:
         '''
         return Log.find_one(self._session, log_id)
 
-
-    # Repositories ---------------------------------------------------------------------------------
     def repos(self, **kwargs):
         '''
         :keyword list(int) ids:
@@ -275,7 +251,6 @@ class TravisPy:
         '''
         return Repo.find_many(self._session, **kwargs)
 
-
     def repo(self, id_or_slug):
         '''
         :type id_or_slug: int | str
@@ -286,8 +261,6 @@ class TravisPy:
         '''
         return Repo.find_one(self._session, id_or_slug)
 
-
-    # Users ----------------------------------------------------------------------------------------
     def user(self):
         '''
         :rtype: :class:`.User`

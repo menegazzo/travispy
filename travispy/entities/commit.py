@@ -1,9 +1,6 @@
 from ._entity import Entity
 
 
-#===================================================================================================
-# Commit
-#===================================================================================================
 class Commit(Entity):
     '''
     There is no API endpoint for resolving commits, however commit data might be included in other
@@ -55,4 +52,4 @@ class Commit(Entity):
         'compare_url',
         'tag',
         'pull_request_number',
-     ]
+    ]

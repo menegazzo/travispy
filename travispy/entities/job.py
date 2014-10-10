@@ -1,10 +1,6 @@
 from ._restartable import Restartable
 
 
-
-#===================================================================================================
-# Job
-#===================================================================================================
 class Job(Restartable):
     '''
     :ivar int build_id:
@@ -76,7 +72,6 @@ class Job(Restartable):
         from .build import Build
         return self._load_one_lazy_information(Build)
 
-
     @property
     def repository(self):
         '''
@@ -86,7 +81,6 @@ class Job(Restartable):
         '''
         from .repo import Repo
         return self._load_one_lazy_information(Repo, 'repository_id')
-
 
     @property
     def log(self):

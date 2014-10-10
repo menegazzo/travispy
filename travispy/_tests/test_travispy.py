@@ -4,15 +4,10 @@ import os
 import pytest
 
 
-
-#===================================================================================================
-# Test
-#===================================================================================================
 class Test:
 
     def setup_method(self, method):
         self._travis = TravisPy.github_auth(os.environ['TRAVISPY_GITHUB_ACCESS_TOKEN'])
-
 
     @pytest.fixture
     def python_version(self):
@@ -26,7 +21,6 @@ class Test:
                 sys.version_info[1],
             )
 
-
     @pytest.fixture
     def repo_slug(self):
         try:
@@ -39,10 +33,8 @@ class Test:
                 sys.version_info[1],
             )
 
-
     def test_github_auth(self):
         assert TravisPy.github_auth('invalid') is None
-
 
     def test_accounts(self):
         accounts = self._travis.accounts()
@@ -54,11 +46,10 @@ class Test:
         assert account.login == 'travispy'
         assert account.type == 'user'
         assert account.repos_count == 6
-        assert not hasattr(account, 'subscribed') # Only for Pro and Enterprise
+        assert not hasattr(account, 'subscribed')  # Only for Pro and Enterprise
 
         account = self._travis.account(123)
         assert account is None
-
 
     def test_branches(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.branches)
@@ -71,7 +62,7 @@ class Test:
         assert branch.id == branches[-1].id
         assert branch.repository_id == repo.id
         assert branch.number == '1'
-        assert branch.pull_request == False
+        assert branch.pull_request is False
         assert branch.config == {
             '.result': 'configured',
             'os': 'linux',
@@ -95,7 +86,7 @@ class Test:
         assert repository == branch.repository
 
         branch.repository_id = -1
-        assert branch.repository == None
+        assert branch.repository is None
 
         jobs = branch.jobs
         assert isinstance(jobs, list)
@@ -108,11 +99,9 @@ class Test:
         assert branch.job_ids == job_ids
         assert jobs == branch.jobs
 
-
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
         assert len(broadcasts) == 0
-
 
     def test_builds(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.builds)
@@ -126,9 +115,9 @@ class Test:
         assert build.id == build_id
         assert build.repository_id == repo.id
         assert build.number == '2'
-        assert build.pull_request == False
-        assert build.pull_request_title == None
-        assert build.pull_request_number == None
+        assert build.pull_request is False
+        assert build.pull_request_title is None
+        assert build.pull_request_number is None
         assert build.config == {
             '.result': 'configured',
             'os': 'linux',
@@ -143,11 +132,11 @@ class Test:
         assert hasattr(build, 'duration')
         assert hasattr(build, 'job_ids')
         assert hasattr(build, 'commit')
-        
+
         assert build.commit_id == build.commit.id
 
-        assert build.restart() == True
-        assert build.cancel() == True
+        assert build.restart() is True
+        assert build.cancel() is True
 
         repository = build.repository
         assert isinstance(repository, Repo)
@@ -155,7 +144,7 @@ class Test:
         assert repository == build.repository
 
         build.repository_id = -1
-        assert build.repository == None
+        assert build.repository is None
 
         jobs = build.jobs
         assert isinstance(jobs, list)
@@ -167,8 +156,7 @@ class Test:
 
         assert build.job_ids == job_ids
         assert jobs == build.jobs
-    
-    
+
     def test_commit(self, repo_slug):
         builds = self._travis.builds(slug=repo_slug)
 
@@ -189,11 +177,9 @@ class Test:
         assert hasattr(commit, 'tag')
         assert hasattr(commit, 'pull_request_number')
 
-
     def test_hooks(self):
         hooks = self._travis.hooks()
         assert len(hooks) == 6
-
 
     def test_jobs(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.jobs)
@@ -223,14 +209,14 @@ class Test:
         assert hasattr(job, 'started_at')
         assert hasattr(job, 'finished_at')
         assert job.queue == 'builds.linux'
-        assert job.allow_failure == False
+        assert job.allow_failure is False
         assert job.annotation_ids == []
         assert hasattr(job, 'commit')
 
         assert job.commit_id == job.commit.id
 
-        assert job.restart() == True
-        assert job.cancel() == True
+        assert job.restart() is True
+        assert job.cancel() is True
 
         build = job.build
         assert isinstance(build, Build)
@@ -238,7 +224,7 @@ class Test:
         assert build == job.build
 
         job.build_id = -1
-        assert job.build == None
+        assert job.build is None
 
         repository = job.repository
         assert isinstance(repository, Repo)
@@ -246,7 +232,7 @@ class Test:
         assert repository == job.repository
 
         job.repository_id = -1
-        assert job.repository == None
+        assert job.repository is None
 
         log = job.log
         assert isinstance(log, Log)
@@ -254,8 +240,7 @@ class Test:
         assert log == job.log
 
         job.log_id = -1
-        assert job.log == None
-
+        assert job.log is None
 
     def test_log(self):
         log = self._travis.log(15928905)
@@ -269,8 +254,7 @@ class Test:
         assert job == log.job
 
         log.job_id = -1
-        assert log.job == None
-
+        assert log.job is None
 
     def test_repos(self, repo_slug):
         repos = self._travis.repos()
@@ -301,12 +285,11 @@ class Test:
         assert last_build == repo.last_build
 
         repo.last_build_id = -1
-        assert repo.last_build == None
-
+        assert repo.last_build is None
 
     def test_user(self):
         user = self._travis.user()
-        assert isinstance(user, User) == True
+        assert isinstance(user, User) is True
 
         # Accessing values using __getitem__
         assert user['login'] == 'travispy'

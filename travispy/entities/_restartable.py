@@ -1,10 +1,6 @@
 from ._stateful import Stateful
 
 
-
-#===================================================================================================
-# Restartable
-#===================================================================================================
 class Restartable(Stateful):
     '''
     Base class for restartable entities such as :class:`.Build` and :class:`.Job`.
@@ -20,7 +16,6 @@ class Restartable(Stateful):
         '''
         response = self._session.post(self._session.uri + '/%s/%d/cancel' % (self.many(), self.id))
         return response.status_code == 204
-
 
     def restart(self):
         '''

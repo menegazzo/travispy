@@ -1,10 +1,6 @@
 from ._stateful import Stateful
 
 
-
-#===================================================================================================
-# Repo
-#===================================================================================================
 class Repo(Stateful):
     '''
     :ivar str slug:
@@ -60,7 +56,6 @@ class Repo(Stateful):
         .. seealso:: :class:`.Stateful` for ``state`` full documentation.
         '''
         return self.last_build_state
-
 
     @property
     def last_build(self):
