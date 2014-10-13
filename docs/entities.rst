@@ -31,9 +31,13 @@ This document brings information about all entities that are used by |travispy| 
 .. module:: travispy.entities
 .. autoclass:: Account
 
+.. autoclass:: Branch
+
 .. autoclass:: Broadcast
 
 .. autoclass:: Build
+
+.. autoclass:: Commit
 
 .. autoclass:: Hook
 
