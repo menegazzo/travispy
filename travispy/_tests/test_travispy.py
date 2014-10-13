@@ -174,7 +174,6 @@ class Test:
         assert hasattr(commit, 'committer_name')
         assert hasattr(commit, 'committer_email')
         assert hasattr(commit, 'compare_url')
-        assert hasattr(commit, 'tag')
         assert hasattr(commit, 'pull_request_number')
 
     def test_hooks(self):
