@@ -31,8 +31,8 @@ class Branch(Stateful):
     :ivar bool pull_request:
         Whether or not the build comes from a pull request.
 
-    :ivar :class:`.Commit` commit:
-        Commit information.
+    :ivar Commit commit:
+        :class:`.Commit` information.
     '''
 
     __slots__ = [

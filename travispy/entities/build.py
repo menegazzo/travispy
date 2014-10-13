@@ -37,11 +37,11 @@ class Build(Restartable):
     :ivar list(int) job_ids:
         List of job IDs in the build matrix.
 
-    :ivar list(:class:`.Job`) jobs:
-        List of jobs in the build matrix.
+    :ivar list(Job) jobs:
+        List of :class:`.Job` in the build matrix.
 
-    :ivar :class:`.Commit` commit:
-        Commit information.
+    :ivar Commit commit:
+        :class:`.Commit` information.
     '''
 
     __slots__ = [

@@ -1,6 +1,14 @@
 Changes
 =======
 
+v0.3.0 (2014-10-13)
+-------------------
+
+* Added new entities Branch and Commit.
+* Now each entity class knows how to retrieve information from Travis CI
+  instead addressing it to Session.
+* PEP8 was applied to all code.
+
 v0.2.0 (2014-08-05)
 -------------------
 
