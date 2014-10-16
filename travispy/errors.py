@@ -1,0 +1,36 @@
+class TravisError(Exception):
+    '''
+    Base error for all TravisPy errors.
+
+    :param dict contents:
+        The response contents. It may be used to create a better message.
+    '''
+
+    def __init__(self, contents):
+        self._contents = contents
+        Exception.__init__(self, self.message())
+
+    def message(self):
+        status_code = self._contents.pop('status_code')
+
+        # Trying to get error message from "errors" key.
+        message = self._contents.get('errors')
+
+        # Trying to get error message from "error" key.
+        if message is None:
+            message = self._contents.get('error', {}).get('message')
+
+        # Trying to get error message from "file" key.
+        if message is None:
+            message = self._contents.get('file')
+
+        return '[%d] %s' % (status_code, message or 'Unknown error')
+
+
+class AuthenticationError(TravisError):
+    '''
+    Error that should be raised when GitHub authentication fails.
+    '''
+
+    def message(self):
+        return '[%(status_code)d] error while authenticating against GitHub' % self._contents

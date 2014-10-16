@@ -1,5 +1,6 @@
 from travispy import TravisPy
 from travispy.entities import Build, Job, Log, Repo, User
+from travispy.errors import AuthenticationError, TravisError
 import os
 import pytest
 
@@ -34,7 +35,9 @@ class Test:
             )
 
     def test_github_auth(self):
-        assert TravisPy.github_auth('invalid') is None
+        with pytest.raises(AuthenticationError) as exception_info:
+            TravisPy.github_auth('invalid')
+        assert str(exception_info.value) == '[500] error while authenticating against GitHub'
 
     def test_accounts(self):
         accounts = self._travis.accounts()
@@ -223,7 +226,9 @@ class Test:
         assert build == job.build
 
         job.build_id = -1
-        assert job.build is None
+        with pytest.raises(TravisError) as exception_info:
+            job.build
+        assert str(exception_info.value) == "[404] not found"
 
         repository = job.repository
         assert isinstance(repository, Repo)
@@ -239,7 +244,9 @@ class Test:
         assert log == job.log
 
         job.log_id = -1
-        assert job.log is None
+        with pytest.raises(TravisError) as exception_info:
+            job.log
+        assert str(exception_info.value) == "[404] not found"
 
     def test_log(self):
         log = self._travis.log(15928905)
@@ -253,7 +260,9 @@ class Test:
         assert job == log.job
 
         log.job_id = -1
-        assert log.job is None
+        with pytest.raises(TravisError) as exception_info:
+            log.job
+        assert str(exception_info.value) == "[404] The job(-1) couldn't be found"
 
     def test_repos(self, repo_slug):
         repos = self._travis.repos()
@@ -284,7 +293,9 @@ class Test:
         assert last_build == repo.last_build
 
         repo.last_build_id = -1
-        assert repo.last_build is None
+        with pytest.raises(TravisError) as exception_info:
+            repo.last_build
+        assert str(exception_info.value) == '[404] not found'
 
     def test_user(self):
         user = self._travis.user()

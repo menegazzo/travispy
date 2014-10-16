@@ -1,3 +1,6 @@
+from travispy._helpers import get_response_contents
+
+
 class Entity(object):
     '''
     Base class for all |travisci| entities.
@@ -71,6 +74,8 @@ class Entity(object):
             The ID of the entity.
 
         :rtype: :class:`.Entity`
+
+        :raises TravisError: when response has status code different than 200.
         '''
         from travispy.entities import COMMAND_TO_ENTITY
 
@@ -80,29 +85,27 @@ class Entity(object):
             cls._find_one_command(cls.many(), str(entity_id), **kwargs)
         )
 
-        if response.status_code == 200:
-            contents = response.json()
+        contents = get_response_contents(response)
+        if command not in contents:
+            return
 
-            if command not in contents:
-                return
+        info = contents.pop(command, {})
+        result = cls._load(info, session)[0]
 
-            info = contents.pop(command, {})
-            result = cls._load(info, session)[0]
+        for name in contents.keys():
 
-            for name in contents.keys():
+            # Unknown entity.
+            if name not in COMMAND_TO_ENTITY:
+                continue
 
-                # Unknown entity.
-                if name not in COMMAND_TO_ENTITY:
-                    continue
+            entity_class = COMMAND_TO_ENTITY[name]
+            dependency = entity_class._load(contents[name], session)
+            if name == entity_class.one():
+                dependency = dependency[0]
 
-                entity_class = COMMAND_TO_ENTITY[name]
-                dependency = entity_class._load(contents[name], session)
-                if name == entity_class.one():
-                    dependency = dependency[0]
+            setattr(result, name, dependency)
 
-                setattr(result, name, dependency)
-
-            return result
+        return result
 
     # Constant that holds parameter names that should be exclusive.
     # That means no more than one of these values may be given.
@@ -118,6 +121,8 @@ class Entity(object):
             Session that must be used to search for results.
 
         :rtype: list(:class:`.Entity`)
+
+        :raises TravisError: when response has status code different than 200.
         '''
         from travispy.entities import COMMAND_TO_ENTITY
 
@@ -133,20 +138,17 @@ class Entity(object):
         command = cls.many()
         response = session.get(session.uri + '/%s' % command, params=kwargs)
 
-        result = []
         dependencies_result = {}
+        contents = get_response_contents(response)
 
         # Retrieving information from Travis and loading into respective classes.
-        if response.status_code == 200:
-            contents = response.json()
+        infos = contents.pop(command, [])
+        result = cls._load(infos, session)
 
-            infos = contents.pop(command, [])
-            result = cls._load(infos, session)
-
-            for name in contents.keys():
-                entity_class = COMMAND_TO_ENTITY[name]
-                dependencies_result[entity_class.one()] = \
-                    entity_class._load(contents[name], session)
+        for name in contents.keys():
+            entity_class = COMMAND_TO_ENTITY[name]
+            dependencies_result[entity_class.one()] = \
+                entity_class._load(contents[name], session)
 
         # Injecting dependencies into main objects.
         for i, entity in enumerate(result):
