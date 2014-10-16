@@ -1,6 +1,11 @@
 Changes
 =======
 
+v0.3.1 (2014-10-16)
+-------------------
+
+* Raising errors when API response status code is different than 200.
+
 v0.3.0 (2014-10-13)
 -------------------
 

@@ -14,12 +14,12 @@ For full documentation please refer to |travisci| `official API`_ documentation.
     :target: http://www.gnu.org/licenses/gpl-3.0-standalone.html
     :alt: License
 
-.. image:: http://img.shields.io/travis/menegazzo/travispy.svg?style=flat
+.. image:: http://img.shields.io/travis/menegazzo/travispy/v0.3.1.svg?style=flat
     :target: https://travis-ci.org/menegazzo/travispy
     :alt: Build status
 
-.. image:: http://img.shields.io/coveralls/menegazzo/travispy.svg?style=flat
-    :target: https://coveralls.io/r/menegazzo/travispy?branch=master
+.. image:: http://img.shields.io/coveralls/menegazzo/travispy/v0.3.1.svg?style=flat
+    :target: https://coveralls.io/r/menegazzo/travispy
     :alt: Coveralls
 '''
 from .entities import *
