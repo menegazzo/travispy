@@ -20,7 +20,7 @@ def test_get_response_contents():
              - Invalid contents returned.
     ''')[1:]
 
-    response._content = '{"error": "foo"}'
+    response._content = b'{"error": "foo"}'
     with pytest.raises(TravisError) as exception_info:
         get_response_contents(response)
     assert str(exception_info.value) == '[111] foo'
