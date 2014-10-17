@@ -13,12 +13,10 @@ class TravisError(Exception):
     def message(self):
         status_code = self._contents.pop('status_code')
 
-        # Trying to get error message from "errors" key.
-        message = self._contents.get('errors')
-
-        # Trying to get error message from "error" key.
-        if message is None:
-            message = self._contents.get('error', {}).get('message')
+        # Trying to get error message from "error/message" key.
+        message = self._contents.get('error')
+        if isinstance(message, dict):
+            message = message.get('message')
 
         # Trying to get error message from "file" key.
         if message is None:
