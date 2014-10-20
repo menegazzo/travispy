@@ -1,6 +1,11 @@
 Changes
 =======
 
+v0.3.2 (2014-10-20)
+-------------------
+
+* Handling unexpected errors (such as JSON decode error or connection timeout).
+
 v0.3.1 (2014-10-16)
 -------------------
 
