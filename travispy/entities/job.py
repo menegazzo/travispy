@@ -111,7 +111,7 @@ class Job(Restartable):
             else:
                 finished_at = datetime.now()
 
-            duration = finished_at - started_at
-            duration = round(duration.total_seconds())
-            setattr(result, 'duration', int(duration))
+            td = finished_at - started_at
+            td = round((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6) / 10 ** 6)
+            setattr(result, 'duration', int(td))
         return result
