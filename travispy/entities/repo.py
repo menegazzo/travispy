@@ -66,3 +66,11 @@ class Repo(Stateful):
         '''
         from .build import Build
         return self._load_one_lazy_information(Build, 'last_build_id')
+
+    @classmethod
+    def find_one(cls, session, entity_id, **kwargs):
+        result = super(Repo, cls).find_one(session, entity_id, **kwargs)
+        # TODO: remove once active is properly synced and exposed by api.
+        if result is not None and not hasattr(result, 'active'):
+            setattr(result, 'active', bool(result.last_build_id))
+        return result
