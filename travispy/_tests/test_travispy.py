@@ -214,6 +214,7 @@ class Test:
         assert job.allow_failure is False
         assert job.annotation_ids == []
         assert hasattr(job, 'commit')
+        assert hasattr(job, 'duration')
 
         assert job.commit_id == job.commit.id
 
