@@ -100,16 +100,16 @@ class Job(Restartable):
             format_ = '%Y-%m-%dT%H:%M:%SZ'
 
             started_at = result.started_at
-            if started_at is not None:
-                started_at = datetime.strptime(started_at, format_)
-            else:
-                started_at = datetime.now()
+            started_at = \
+                datetime.strptime(started_at, format_) \
+                if started_at is not None \
+                else datetime.now()
 
             finished_at = result.finished_at
-            if finished_at is not None:
-                finished_at = datetime.strptime(finished_at, format_)
-            else:
-                finished_at = datetime.now()
+            finished_at = \
+                datetime.strptime(finished_at, format_) \
+                if finished_at is not None \
+                else datetime.now()
 
             td = finished_at - started_at
             td = round((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6) / 10 ** 6)
