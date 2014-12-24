@@ -1,6 +1,12 @@
 Changes
 =======
 
+v0.3.3 (2014-12-24)
+-------------------
+
+* Providing proper access to ``Repo.active`` when this is not returned from API.
+* Providing proper access to ``Job.duration`` when this is not returned from API.
+
 v0.3.2 (2014-10-20)
 -------------------
 
