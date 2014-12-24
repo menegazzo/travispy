@@ -104,7 +104,7 @@ class Test:
 
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
-        assert len(broadcasts) == 0
+        assert len(broadcasts) == 1
 
     def test_builds(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.builds)
@@ -214,6 +214,7 @@ class Test:
         assert job.allow_failure is False
         assert job.annotation_ids == []
         assert hasattr(job, 'commit')
+        assert hasattr(job, 'duration')
 
         assert job.commit_id == job.commit.id
 
@@ -285,6 +286,7 @@ class Test:
         assert hasattr(repo, 'last_build_duration')
         assert hasattr(repo, 'last_build_started_at')
         assert hasattr(repo, 'last_build_finished_at')
+        assert repo.active is True
         assert repo.state == repo.last_build_state
 
         last_build = repo.last_build
