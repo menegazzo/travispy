@@ -104,7 +104,7 @@ class Test:
 
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
-        assert len(broadcasts) == 1
+        assert isinstance(broadcasts, list)
 
     def test_builds(self, python_version, repo_slug):
         pytest.raises(RuntimeError, self._travis.builds)
