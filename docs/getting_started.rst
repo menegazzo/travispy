@@ -49,7 +49,7 @@ To get the list of repositories that you are member of::
 
 Or simply request for repository you want::
 
-    >>> repo = r.repo('travispy/on_py34')
+    >>> repo = t.repo('travispy/on_py34')
     <travispy.entities.repo.Repo object at 0x02C26C51>
 
 And finally, getting build information::
