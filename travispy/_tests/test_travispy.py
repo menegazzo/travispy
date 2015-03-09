@@ -3,6 +3,7 @@ from travispy.entities import Build, Job, Log, Repo, User
 from travispy.errors import AuthenticationError, TravisError
 import os
 import pytest
+import time
 
 
 class Test:
@@ -140,8 +141,19 @@ class Test:
 
         assert build.commit_id == build.commit.id
 
-        assert build.restart() is True
-        assert build.cancel() is True
+        count = 0
+        while not build.restart():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
+
+        count = 0
+        while not build.cancel():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
 
         repository = build.repository
         assert isinstance(repository, Repo)
@@ -222,8 +234,19 @@ class Test:
 
         assert job.commit_id == job.commit.id
 
-        assert job.restart() is True
-        assert job.cancel() is True
+        count = 0
+        while not job.restart():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
+
+        count = 0
+        while not job.cancel():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
 
         build = job.build
         assert isinstance(build, Build)
