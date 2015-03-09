@@ -4,8 +4,17 @@ env:
   - secure: J1xqFhA2jT8S5f5bpryopVj2AIA35eHlWDHHJSlyZKFQQHsnK+cUo3XoP1qatuv242WlKkaj8iBmsg9UcpZN0V5vN8wi5AM+6afeDyXjnmDr88KErfo03WCzWXtOKYNXZK4bx0pUP9McBXWq76GnefWRzD7fDUofZPm+oCylI9A=
 language: python
 python:
+- 2.6
 - 2.7
+- 3.2
+- 3.3
+- 3.4
+- pypy
 install:
-- pip install tox
+- pip install pytest
+- pip install requests
+- pip install coveralls
 script:
-- tox
+- coverage run --source=travispy setup.py test
+after_success:
+- coveralls
