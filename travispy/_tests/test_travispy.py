@@ -62,11 +62,12 @@ class Test:
 
         repo = self._travis.repo(repo_slug)
         branch = self._travis.branch('master', repo_slug)
-        assert branch.id == branches[-1].id
+        assert branch.id == branches[0].id
         assert branch.repository_id == repo.id
-        assert branch.number == '1'
+        assert branch.number == '3'
         assert branch.pull_request is False
         assert branch.config == {
+            'sudo': False,
             '.result': 'configured',
             'os': 'linux',
             'language': 'python',
@@ -110,18 +111,19 @@ class Test:
         pytest.raises(RuntimeError, self._travis.builds)
 
         builds = self._travis.builds(slug=repo_slug)
-        assert len(builds) == 2
+        assert len(builds) == 3
 
         repo = self._travis.repo(repo_slug)
         build_id = builds[0].id
         build = self._travis.build(build_id)
         assert build.id == build_id
         assert build.repository_id == repo.id
-        assert build.number == '2'
+        assert build.number == '3'
         assert build.pull_request is False
         assert build.pull_request_title is None
         assert build.pull_request_number is None
         assert build.config == {
+            'sudo': False,
             '.result': 'configured',
             'os': 'linux',
             'language': 'python',
@@ -198,8 +200,10 @@ class Test:
         job = self._travis.job(build.job_ids[0])
         assert job.build_id == build_id
         assert job.repository_id == repo.id
-        assert job.number == '2.1'
+        assert job.number == '3.1'
         assert job.config == {
+            'sudo': False,
+            'os': 'linux',
             '.result': 'configured',
             'language': 'python',
             'python': python_version,
@@ -210,7 +214,7 @@ class Test:
         assert hasattr(job, 'state')
         assert hasattr(job, 'started_at')
         assert hasattr(job, 'finished_at')
-        assert job.queue == 'builds.linux'
+        assert job.queue == 'builds.docker'
         assert job.allow_failure is False
         assert job.annotation_ids == []
         assert hasattr(job, 'commit')
