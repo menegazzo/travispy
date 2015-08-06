@@ -23,12 +23,3 @@ class TravisError(Exception):
             message = self._contents.get('file')
 
         return '[%d] %s' % (status_code, message or 'Unknown error')
-
-
-class AuthenticationError(TravisError):
-    '''
-    Error that should be raised when GitHub authentication fails.
-    '''
-
-    def message(self):
-        return '[%(status_code)d] error while authenticating against GitHub' % self._contents

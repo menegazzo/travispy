@@ -1,6 +1,6 @@
 from travispy import TravisPy
 from travispy.entities import Build, Job, Log, Repo, User
-from travispy.errors import AuthenticationError, TravisError
+from travispy.errors import TravisError
 import os
 import pytest
 import time
@@ -36,9 +36,9 @@ class Test:
             )
 
     def test_github_auth(self):
-        with pytest.raises(AuthenticationError) as exception_info:
+        with pytest.raises(TravisError) as exception_info:
             TravisPy.github_auth('invalid')
-        assert str(exception_info.value) == '[500] error while authenticating against GitHub'
+        assert str(exception_info.value) == '[403] not a Travis user'
 
     def test_accounts(self):
         accounts = self._travis.accounts()
@@ -333,4 +333,3 @@ class Test:
         # Accessing values using __getitem__
         assert user['login'] == 'travispy'
         assert user['name'] == 'TravisPy'
-        assert user['email'] == 'menegazzo+travispy@gmail.com'

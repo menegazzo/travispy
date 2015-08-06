@@ -21,6 +21,9 @@ class Account(Entity):
     :ivar bool subscribed:
         Whether or not the account has a valid subscription.
         Only available on *Travis Pro*.
+
+    :ivar str avatar_url:
+        Link to avatar.
     '''
 
     __slots__ = [
@@ -29,4 +32,5 @@ class Account(Entity):
         'type',
         'repos_count',
         'subscribed',
+        'avatar_url',
     ]

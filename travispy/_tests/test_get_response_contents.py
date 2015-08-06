@@ -11,7 +11,11 @@ def test_get_response_contents():
     response._content = 'foo'
     with pytest.raises(TravisError) as exception_info:
         get_response_contents(response)
+    assert str(exception_info.value) == '[111] foo'
 
+    response._content = ''
+    with pytest.raises(TravisError) as exception_info:
+        get_response_contents(response)
     assert str(exception_info.value) == textwrap.dedent('''
         [111] Unexpected error
             Possible reasons are:

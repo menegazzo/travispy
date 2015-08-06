@@ -19,7 +19,6 @@ ENTERPRISE = '%(domain)s/api'
 
 from ._helpers import get_response_contents
 from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, Session, User
-from .errors import AuthenticationError
 import requests
 
 
@@ -70,12 +69,12 @@ class TravisPy:
         :returns:
             A :class:`.TravisPy` instance authenticated with GitHub account.
 
-        :raises AuthenticationError: when authentication against GitHub fails.
+        :raises TravisError: when authentication against GitHub fails.
         '''
         response = requests.post(uri + '/auth/github', headers=cls._HEADERS, params={
             "github_token": token,
         })
-        contents = get_response_contents(response, AuthenticationError)
+        contents = get_response_contents(response)
         access_token = contents['access_token']
         return TravisPy(access_token, uri)
 

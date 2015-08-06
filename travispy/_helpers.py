@@ -2,15 +2,11 @@ from .errors import TravisError
 import textwrap
 
 
-def get_response_contents(response, exception_=TravisError):
+def get_response_contents(response):
     '''
     :type response: :class:`requests.models.Response`
     :param response:
         Response returned from Travis API.
-
-    :type exception_: :class:`.TravisError`
-    :param exception:
-        Exception that should be raised when return code is different than 200.
 
     :rtype: dict
     :returns:
@@ -22,15 +18,18 @@ def get_response_contents(response, exception_=TravisError):
     try:
         contents = response.json()
     except:
-        contents = {
-            'status_code': status_code,
-            'error': textwrap.dedent('''
+        error = response.text.strip()
+        if not error:
+            error = textwrap.dedent('''
                 Unexpected error
                     Possible reasons are:
                      - Communication with Travis CI has failed.
                      - Insufficient permissions.
                      - Invalid contents returned.
-                ''')[1:],
+                ''')[1:]
+        contents = {
+            'status_code': status_code,
+            'error': error,
         }
         raise TravisError(contents)
 
@@ -38,4 +37,4 @@ def get_response_contents(response, exception_=TravisError):
         return contents
     else:
         contents['status_code'] = status_code
-        raise exception_(contents)
+        raise TravisError(contents)
