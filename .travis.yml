@@ -1,7 +1,7 @@
 sudo: false
 env:
   global:
-  - secure: J1xqFhA2jT8S5f5bpryopVj2AIA35eHlWDHHJSlyZKFQQHsnK+cUo3XoP1qatuv242WlKkaj8iBmsg9UcpZN0V5vN8wi5AM+6afeDyXjnmDr88KErfo03WCzWXtOKYNXZK4bx0pUP9McBXWq76GnefWRzD7fDUofZPm+oCylI9A=
+  - secure: A4hLh8CQbeTWIittGJu3O9nlytxhiSFGtuTqfKt+LNPwOYWzsVa/xZ8PQeWv/UzpQMvIVvQ7BYCqo+Ed4i12Y0bn87w6F0LRQA1TrVXEeJf+b41B8G/KuxhiNKo9Wlsou5AfIEPDUFlFbtviZYHC2mROxv+2mkiWdTYEEfkDhcY=
 language: python
 python:
 - 2.6
