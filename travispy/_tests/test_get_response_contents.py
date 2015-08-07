@@ -8,7 +8,7 @@ import textwrap
 def test_get_response_contents():
     response = Response()
     response.status_code = 111
-    response._content = 'foo'
+    response._content = b'foo'
     with pytest.raises(TravisError) as exception_info:
         get_response_contents(response)
     assert str(exception_info.value) == '[111] foo'
