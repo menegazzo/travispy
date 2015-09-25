@@ -6,10 +6,19 @@ import pytest
 import time
 
 
+GITHUB_ACCESS_TOKEN = os.environ.get('TRAVISPY_GITHUB_ACCESS_TOKEN')
+
+TRAVIS_REPO_SLUG = os.environ['TRAVIS_REPO_SLUG']
+TRAVIS_USER, TRAVIS_PROJECT = TRAVIS_REPO_SLUG.split('/', 1)
+
+
 class Test:
 
     def setup_method(self, method):
-        self._travis = TravisPy.github_auth(os.environ['TRAVISPY_GITHUB_ACCESS_TOKEN'])
+        if GITHUB_ACCESS_TOKEN:
+            self._travis = TravisPy.github_auth(GITHUB_ACCESS_TOKEN)
+        else:
+            self._travis = TravisPy()
 
     @pytest.fixture
     def python_version(self):
@@ -35,16 +44,23 @@ class Test:
                 sys.version_info[1],
             )
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
     def test_github_auth(self):
         with pytest.raises(TravisError) as exception_info:
             TravisPy.github_auth('invalid')
         assert str(exception_info.value) == '[403] not a Travis user'
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
+    @pytest.mark.skipif(TRAVIS_USER != 'travispy',
+                        reason='uses travispy account details')
     def test_accounts(self):
         accounts = self._travis.accounts()
         assert len(accounts) == 1
 
         assert accounts[0].id == 84789
+
         account = self._travis.account(84789)
         assert account.name == 'TravisPy'
         assert account.login == 'travispy'
@@ -104,6 +120,8 @@ class Test:
         assert branch.job_ids == job_ids
         assert jobs == branch.jobs
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
     def test_broadcasts(self):
         broadcasts = self._travis.broadcasts()
         assert isinstance(broadcasts, list)
@@ -141,20 +159,6 @@ class Test:
 
         assert build.commit_id == build.commit.id
 
-        count = 0
-        while not build.restart():
-            if count >= 10:
-                assert False
-            time.sleep(1)
-            count += 1
-
-        count = 0
-        while not build.cancel():
-            if count >= 10:
-                assert False
-            time.sleep(1)
-            count += 1
-
         repository = build.repository
         assert isinstance(repository, Repo)
         assert build.repository_id == repository.id
@@ -173,6 +177,30 @@ class Test:
 
         assert build.job_ids == job_ids
         assert jobs == build.jobs
+
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
+    @pytest.mark.skipif(TRAVIS_USER != 'travispy',
+                        reason='requires permission to act as travispy')
+    def test_build_actions(self, python_version, repo_slug):
+        pytest.raises(RuntimeError, self._travis.builds)
+
+        builds = self._travis.builds(slug=repo_slug)
+        build = builds[0]
+
+        count = 0
+        while not build.restart():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
+
+        count = 0
+        while not build.cancel():
+            if count >= 10:
+                assert False
+            time.sleep(1)
+            count += 1
 
     def test_commit(self, repo_slug):
         builds = self._travis.builds(slug=repo_slug)
@@ -193,8 +221,13 @@ class Test:
         assert hasattr(commit, 'compare_url')
         assert hasattr(commit, 'pull_request_number')
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
+    @pytest.mark.skipif(TRAVIS_USER != 'travispy',
+                        reason='uses travispy account details')
     def test_hooks(self):
         hooks = self._travis.hooks()
+
         assert len(hooks) == 6
 
     def test_jobs(self, python_version, repo_slug):
@@ -234,6 +267,22 @@ class Test:
 
         assert job.commit_id == job.commit.id
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
+    @pytest.mark.skipif(TRAVIS_USER != 'travispy',
+                        reason='requires permission to act as travispy')
+    def test_job_actions(self, python_version, repo_slug):
+        pytest.raises(RuntimeError, self._travis.jobs)
+
+        builds = self._travis.builds(slug=repo_slug)
+        build_id = builds[0].id
+        build = self._travis.build(build_id)
+
+        jobs = self._travis.jobs(ids=build.job_ids)
+        assert len(jobs) == 1
+
+        job = jobs[0]
+
         count = 0
         while not job.restart():
             if count >= 10:
@@ -252,6 +301,9 @@ class Test:
         assert isinstance(build, Build)
         assert job.build_id == build.id
         assert build == job.build
+
+    def test_negative_ids(self):
+        job = self._travis.job(81966565)
 
         job.build_id = -1
         with pytest.raises(TravisError) as exception_info:
@@ -326,10 +378,14 @@ class Test:
             repo.last_build
         assert str(exception_info.value) == '[404] not found'
 
+    @pytest.mark.skipif(not GITHUB_ACCESS_TOKEN,
+                        reason='TRAVISPY_GITHUB_ACCESS_TOKEN not set')
     def test_user(self):
         user = self._travis.user()
         assert isinstance(user, User) is True
 
         # Accessing values using __getitem__
-        assert user['login'] == 'travispy'
+        assert user['login'] == TRAVIS_USER
+        if TRAVIS_USER != 'travispy':
+            return
         assert user['name'] == 'TravisPy'
