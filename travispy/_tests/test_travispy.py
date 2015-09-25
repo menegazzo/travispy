@@ -70,7 +70,6 @@ class Test:
         assert branch.config == {
             'sudo': False,
             '.result': 'configured',
-            'os': 'linux',
             'language': 'python',
             'python': [python_version],
             'script': ['py.test'],
@@ -126,7 +125,6 @@ class Test:
         assert build.config == {
             'sudo': False,
             '.result': 'configured',
-            'os': 'linux',
             'language': 'python',
             'python': [python_version],
             'script': ['py.test'],
