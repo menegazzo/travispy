@@ -3,8 +3,10 @@ from travispy.entities import Build, Job, Log, Repo, User
 from travispy.errors import TravisError
 import os
 import pytest
+import sys
 import time
 
+UnicodeType = unicode if sys.version_info[0] == 2 else str
 
 GITHUB_ACCESS_TOKEN = os.environ.get('TRAVISPY_GITHUB_ACCESS_TOKEN')
 
@@ -326,11 +328,16 @@ class Test:
             job.log
         assert str(exception_info.value) == "[404] not found"
 
-    def test_log(self):
+    def test_archived_log(self):
         log = self._travis.log(15928905)
         assert log.id == 15928905
         assert log.job_id == 25718104
-        assert hasattr(log, 'body')
+
+        # Initial Log body is empty
+        assert log._body is None
+        # Dynamically fetch the log
+        assert log.body
+        assert isinstance(log.body, UnicodeType)
 
         job = log.job
         assert isinstance(job, Job)
@@ -341,6 +348,34 @@ class Test:
         with pytest.raises(TravisError) as exception_info:
             log.job
         assert str(exception_info.value) == "[404] The job(-1) couldn't be found"
+
+    def test_incomplete_log(self):
+        """Test an incomplete job."""
+        jobs = self._travis.jobs(state='started')
+        log = jobs[0].log
+
+        assert log._body is not None
+        assert log.body is not None
+
+    def test_recent_passed_log(self):
+        """Test a recently finished job."""
+        jobs = self._travis.jobs(state='passed')
+        log = jobs[0].log
+
+        assert log._body is None
+        assert log.body is not None
+        assert log._body is not None
+
+    def test_empty_archived_log(self):
+        job = self._travis.job(81891594)
+        assert job.build.id == 81891579
+        assert job.log.job_id == 81891594
+
+        log = job.log
+
+        assert log._body is None
+        assert log.body == ''
+        assert log._body == ''
 
     def test_repos(self, repo_slug):
         repos = self._travis.repos()
