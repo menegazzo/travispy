@@ -1,3 +1,5 @@
+from warnings import warn
+
 from travispy._helpers import get_response_contents
 
 
@@ -187,7 +189,11 @@ class Entity(object):
                         continue
                     else:
                         key = '_body'
-                setattr(entity, key, value)
+                try:
+                    setattr(entity, key, value)
+                except AttributeError:
+                    warn('Unknown {0} attribute {1}'
+                         .format(entity.__class__.__name__, key))
             result.append(entity)
 
         return result
