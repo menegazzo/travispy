@@ -18,7 +18,10 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
-        errno = pytest.main(['travispy'] + self.pytest_args)
+        args = ['travispy']
+        if self.pytest_args:
+            args.insert(0, self.pytest_args)
+        errno = pytest.main(args)
         sys.exit(errno)
 
 

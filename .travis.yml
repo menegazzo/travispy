@@ -11,6 +11,6 @@ install:
 - pip install requests
 - pip install coveralls
 script:
-- coverage run --source=travispy setup.py test -a "-rxs"
+- coverage run --source=travispy setup.py test -a -rxs
 after_success:
 - coveralls

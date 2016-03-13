@@ -229,6 +229,7 @@ def test_incomplete_log(travis):
     assert log.body is not None
 
 
+@pytest.mark.flaky(reruns=5)
 def test_recent_passed_log(travis):
     jobs = travis.jobs(state='passed')
     log = jobs[0].log
@@ -237,7 +238,6 @@ def test_recent_passed_log(travis):
     assert log._body is not None
 
 
-@pytest.mark.flaky(reruns=5)
 def test_empty_archived_log(travis):
     job = travis.job(81891594)
     assert job.build.id == 81891579
