@@ -25,12 +25,14 @@ class Log(Entity):
         :returns:
             The archived log.
         '''
-        header_overrides={
+        header_overrides = {
             'Accept': 'text/plain; version=2'
         }
 
-        r = self._session.get(self._session.uri + ('/jobs/%s/log' % self.job_id),
-                         headers=header_overrides)
+        r = self._session.get(
+            self._session.uri + ('/jobs/%s/log' % self.job_id),
+            headers=header_overrides,
+        )
         return r.content.decode('utf-8')
 
     @property
