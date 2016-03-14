@@ -2,4 +2,6 @@
 source = travispy
 
 [report]
-omit = */_tests/*
+omit = 
+        */_tests/*
+        */conftest.py

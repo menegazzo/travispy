@@ -18,13 +18,16 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
-        errno = pytest.main(['travispy'] + self.pytest_args)
+        args = ['travispy']
+        if self.pytest_args:
+            args.insert(0, self.pytest_args)
+        errno = pytest.main(args)
         sys.exit(errno)
 
 
 setup(
     name='TravisPy',
-    version='0.3.3',
+    version='0.3.4',
     packages=['travispy', 'travispy.entities'],
     install_requires=[x.strip() for x in open('requirements.txt')],
 
@@ -41,11 +44,9 @@ setup(
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 

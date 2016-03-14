@@ -1,6 +1,13 @@
 Changes
 =======
 
+v0.3.4 (2016-03-13)
+-------------------
+
+* Fetching log's body on demand.
+* Ignore and warn user about unexpected attributes.
+* Tests refactored to allow local tests by any user (TRAVISPY_TEST_SETTINGS environment variable).
+
 v0.3.3 (2014-12-24)
 -------------------
 

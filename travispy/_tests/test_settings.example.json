@@ -1,0 +1,100 @@
+{
+  "github_token": "<generated_at_github>",
+  "repo_slug": "travispy/on_py27",
+  "account": {
+    "count": 1,
+    "id": 84789,
+    "name": "TravisPy",
+    "login": "travispy",
+    "type": "user",
+    "repos_count": 7,
+    "subscribed": false
+  },
+  "branch": {
+    "count": 2,
+    "id": 53685546,
+    "repository_id": 2598876,
+    "number": "3",
+    "pull_request": false,
+    "config": {
+      "group": "stable",
+      "language": "python",
+      "script": ["py.test"],
+      "python": ["2.7"],
+      "sudo": false,
+      ".result": "configured",
+      "dist": "precise"
+    }
+  },
+  "build": {
+    "count": 3,
+    "id": 53685546,
+    "repository_id": 2598876,
+    "number": "3",
+    "pull_request": false,
+    "pull_request_title": null,
+    "pull_request_number": null,
+    "config": {
+      "group": "stable",
+      "language": "python",
+      "script": ["py.test"],
+      "python": ["2.7"],
+      "sudo": false,
+      ".result": "configured",
+      "dist": "precise"
+    }
+  },
+  "commit": {
+    "count": 3,
+    "id": 15406195,
+    "sha": "2817ced8f5325e9dedd819714aa7ade5065cac5a",
+    "branch": "master",
+    "message": "Updating Travis config file.",
+    "committed_at": "2015-03-09T18:07:12Z",
+    "author_name": "Fabio Menegazzo",
+    "author_email": "menegazzo@esss.com.br",
+    "commiter_name": "Fabio Menegazzo",
+    "commiter_email": "menegazzo@esss.com.br",
+    "compare_url": "https://github.com/travispy/on_py27/compare/6ca280108f48...2817ced8f532",
+    "pull_request_number": null
+  },
+  "hook": {
+    "count": 4,
+    "name": "on_py27",
+    "description": "TravisPy test project for Python 2.7",
+    "owner_name": "travispy",
+    "active": true,
+    "private": false,
+    "admin": true
+  },
+  "job": {
+    "count": 1,
+    "build_id": 53685546,
+    "repository_id": 2598876,
+    "number": "3.1",
+    "config": {
+      ".result": "configured",
+      "language": "python",
+      "os": "linux",
+      "python": "2.7",
+      "script": ["py.test"],
+      "sudo": false
+    },
+    "queue": "builds.docker",
+    "allow_failure": false,
+    "annotation_ids": []
+  },
+  "repo": {
+    "public_count": 25,
+    "member_count": 5,
+    "owner_count": 7,
+    "github_language": "Python",
+    "id": 2598876,
+    "description": "TravisPy test project for Python 2.7",
+    "active": true
+  },
+  "user": {
+    "login": "travispy",
+    "name": "TravisPy"
+  }
+}

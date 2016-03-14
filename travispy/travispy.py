@@ -9,17 +9,17 @@
     :annotation: = URI template for Travis CI service running under a personal domain. Usage will be
                  something like ENTERPRISE % {'domain': 'http://travis.example.com'}.
 '''
+from ._helpers import get_response_contents
+from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, Session, User
+import requests
+
+
 PUBLIC = 'http://api.travis-ci.org'
 PRIVATE = 'http://api.travis-ci.com'
 
 # Replace "domain" with the domain TravisCI is running on.
 # ENTERPRISE % {'domain': 'http://travis.example.com'}
 ENTERPRISE = '%(domain)s/api'
-
-
-from ._helpers import get_response_contents
-from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, Session, User
-import requests
 
 
 class TravisPy:
