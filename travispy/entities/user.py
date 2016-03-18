@@ -46,3 +46,15 @@ class User(Entity):
         'created_at',
         'locale',
     ]
+
+    def sync (self):
+        '''
+        Method that "triggers a new sync with GitHub. Might return status 409 if the user is currently syncing."
+
+        :rtype: bool
+        :returns:
+            ``True`` if sync request was send successfuly to |travisci| and response code is 200
+            ``False`` if a sync is already is progress
+        '''
+        response = self._session.post(self._session.uri + '/users/sync')
+        return response.status_code == 200
