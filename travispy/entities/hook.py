@@ -1,5 +1,4 @@
 from ._entity import Entity
-import json
 
 
 class Hook(Entity):
@@ -51,9 +50,15 @@ class Hook(Entity):
     def disable(self):
         if self._set_hook(False):
             self.active = False
+            return True
+        else:
+            return False
 
 
     def enable(self):
         if self._set_hook(True):
             self.active = True
+            return True
+        else:
+            return False
 
