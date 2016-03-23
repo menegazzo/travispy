@@ -30,35 +30,3 @@ class Hook(Entity):
         'private',
         'admin',
     ]
-
-    def _set_hook(self, flag):
-        '''
-
-        '''
-        url = self._session.uri + '/hooks/{}'.format(self.id)
-        data = {
-            "hook": {
-                "active": flag
-            }
-        }
-
-        response = self._session.put(url, json = data)
-
-        return response.status_code == 200
-
-
-    def disable(self):
-        if self._set_hook(False):
-            self.active = False
-            return True
-        else:
-            return False
-
-
-    def enable(self):
-        if self._set_hook(True):
-            self.active = True
-            return True
-        else:
-            return False
-

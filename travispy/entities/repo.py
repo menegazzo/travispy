@@ -87,18 +87,22 @@ class Repo(Stateful):
 
 
     def disable(self):
+
+        success = False
         if self._set_hook(False):
             self.active = False
-            return True
-        else:
-            return False
+            success = True
+ 
+        return success
 
 
     def enable(self):
+
+        success = False
         if self._set_hook(True):
             self.active = True
-            return True
-        else:
-            return False
+            success = True
+
+        return success
 
 
