@@ -49,7 +49,7 @@ class User(Entity):
 
     def sync (self):
         '''
-        Method that "triggers a new sync with GitHub. Might return status 409 if the user is currently syncing."
+        Triggers a new sync with GitHub. Might return status 409 if user is currently syncing.
 
         :rtype: bool
         :returns:

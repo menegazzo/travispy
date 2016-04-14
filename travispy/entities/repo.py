@@ -72,7 +72,6 @@ class Repo(Stateful):
         result = super(Repo, cls).find_one(session, entity_id, **kwargs)
         return result
 
-
     def _set_hook(self, flag):
         url = self._session.uri + '/hooks/{}'.format(self.id)
         data = {
@@ -83,26 +82,30 @@ class Repo(Stateful):
 
         response = self._session.put(url, json = data)
 
-        return response.status_code == 200
-
+        if response.status_code == 200:
+            self.active = flag
+            return True
+        else:
+            return False
 
     def disable(self):
-
-        success = False
-        if self._set_hook(False):
-            self.active = False
-            success = True
- 
-        return success
-
+        '''
+        turn off Travis CI for the repository
+        :rtype: bool
+        :returns:
+            ``True`` if API call was successful
+            ``False`` if API call was unsuccessful
+        '''
+        return self._set_hook(False)
 
     def enable(self):
-
-        success = False
-        if self._set_hook(True):
-            self.active = True
-            success = True
-
-        return success
+        '''
+        turn on Travis CI for the repository
+        :rtype: bool
+        :returns:
+            ``True`` if API call was successful
+            ``False`` if API call was unsuccessful
+        '''
+        return self._set_hook(True)
 
 
