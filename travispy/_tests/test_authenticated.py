@@ -106,6 +106,21 @@ def test_job(travis, repo_slug):
         'Failed while canceling job',
     )
 
+def test_repo_enable_disable(travis, repo_slug):
+    repo = travis.repo(repo_slug)
+
+    # check active so we try to return status to original state
+    if repo.active:
+        assert repo.disable()
+        assert not(repo.active)
+        assert repo.enable()
+        assert repo.active
+    else:
+        assert repo.enable()
+        assert repo.active
+        assert repo.disable()
+        assert not(repo.active)
+
 
 def test_user(travis, test_settings):
     expected = test_settings.get('user')
@@ -118,3 +133,6 @@ def test_user(travis, test_settings):
     # Accessing values using __getitem__
     assert user['login'] == expected['login']
     assert user['name'] == expected['name']
+
+    # test sync
+    assert user.sync()

@@ -14,8 +14,8 @@ from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, S
 import requests
 
 
-PUBLIC = 'http://api.travis-ci.org'
-PRIVATE = 'http://api.travis-ci.com'
+PUBLIC = 'https://api.travis-ci.org'
+PRIVATE = 'https://api.travis-ci.com'
 
 # Replace "domain" with the domain TravisCI is running on.
 # ENTERPRISE % {'domain': 'http://travis.example.com'}
