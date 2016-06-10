@@ -1,6 +1,12 @@
 Changes
 =======
 
+v0.3.5 (2016-07-10)
+-------------------
+
+* Capability of enable/disable Travis for a repository.
+* Option to synchronize with GitHub.
+
 v0.3.4 (2016-03-13)
 -------------------
 

@@ -73,39 +73,33 @@ class Repo(Stateful):
         return result
 
     def _set_hook(self, flag):
-        url = self._session.uri + '/hooks/{}'.format(self.id)
-        data = {
-            "hook": {
-                "active": flag
-            }
-        }
-
-        response = self._session.put(url, json = data)
-
-        if response.status_code == 200:
+        response = self._session.put(
+            self._session.uri + '/hooks/{}'.format(self.id),
+            json={"hook": {"active": flag}},
+        )
+        result = response.status_code == 200
+        if result:
             self.active = flag
-            return True
-        else:
-            return False
+        return result
 
     def disable(self):
         '''
-        turn off Travis CI for the repository
+        Disable Travis CI for the repository.
+
         :rtype: bool
         :returns:
-            ``True`` if API call was successful
-            ``False`` if API call was unsuccessful
+            ``True`` if API call was successful.
+            ``False`` if API call was unsuccessful.
         '''
         return self._set_hook(False)
 
     def enable(self):
         '''
-        turn on Travis CI for the repository
+        Enable Travis CI for the repository
+
         :rtype: bool
         :returns:
             ``True`` if API call was successful
             ``False`` if API call was unsuccessful
         '''
         return self._set_hook(True)
-
-
