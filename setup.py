@@ -29,7 +29,7 @@ setup(
     name='TravisPy',
     version='0.3.5',
     packages=['travispy', 'travispy.entities'],
-    install_requires=[x.strip() for x in open('requirements.txt')],
+    install_requires=['requests'],
 
     # metadata for upload to PyPI
     author='Fabio Menegazzo',
