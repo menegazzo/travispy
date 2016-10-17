@@ -7,7 +7,7 @@
     "name": "TravisPy",
     "login": "travispy",
     "type": "user",
-    "repos_count": 7,
+    "repos_count": 1,
     "subscribed": false
   },
   "branch": {
@@ -59,7 +59,7 @@
     "pull_request_number": null
   },
   "hook": {
-    "count": 4,
+    "count": 1,
     "name": "on_py27",
     "description": "TravisPy test project for Python 2.7",
     "owner_name": "travispy",
@@ -86,9 +86,9 @@
   },
   "repo": {
     "public_count": 25,
-    "member_count": 5,
-    "owner_count": 7,
-    "github_language": "Python",
+    "member_count": 2,
+    "owner_count": 1,
+    "github_language": null,
     "id": 2598876,
     "description": "TravisPy test project for Python 2.7",
     "active": true
