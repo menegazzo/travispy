@@ -1,16 +1,9 @@
 sudo: false
 language: python
-python:
-- 2.7
-- 3.4
-- 3.5
-- pypy
+python: 3.5
 install:
-- pip install pytest
-- pip install pytest-rerunfailures
-- pip install requests
-- pip install coveralls
+- pip install coveralls tox
 script:
-- coverage run --source=travispy setup.py test -a -rxs
+- tox
 after_success:
 - coveralls
