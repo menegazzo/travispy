@@ -8,11 +8,10 @@ class TravisError(Exception):
 
     def __init__(self, contents):
         self._contents = contents
+        self.status_code = contents['status_code']
         Exception.__init__(self, self.message())
 
     def message(self):
-        status_code = self._contents.pop('status_code')
-
         # Trying to get error message from "error/message" key.
         message = self._contents.get('error')
         if isinstance(message, dict):
@@ -22,4 +21,4 @@ class TravisError(Exception):
         if message is None:
             message = self._contents.get('file')
 
-        return '[%d] %s' % (status_code, message or 'Unknown error')
+        return '[%d] %s' % (self.status_code, message or 'Unknown error')
