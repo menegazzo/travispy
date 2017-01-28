@@ -39,6 +39,7 @@ class User(Entity):
         'name',
         'email',
         'gravatar_id',
+        'avatar_url',
         'is_syncing',
         'synced_at',
         'correct_scopes',
