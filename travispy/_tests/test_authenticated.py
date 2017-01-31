@@ -106,6 +106,49 @@ def test_job(travis, repo_slug):
         'Failed while canceling job',
     )
 
+
+def test_repo(travis, test_settings, repo_slug):
+    from travispy.entities import Build
+
+    expected = test_settings.get('repo')
+    if not expected:
+        pytest.skip('TRAVISPY_TEST_SETTINGS has no "repo" value')
+
+    repos = travis.repos()
+    assert len(repos) == expected['public_count']
+
+    repos = travis.repos(member='travispy')
+    assert len(repos) == expected['member_count']
+
+    repos = travis.repos(owner_name='travispy')
+    assert len(repos) == expected['owner_count']
+
+    repo = travis.repo(repo_slug)
+    assert repo.slug == repo_slug
+    assert repo.github_language == expected['github_language']
+    assert repo.id == expected['id']
+    assert repo.description == expected['description']
+    assert repo.active == expected['active']
+
+    assert hasattr(repo, 'last_build_id')
+    assert hasattr(repo, 'last_build_number')
+    assert hasattr(repo, 'last_build_state')
+    assert hasattr(repo, 'last_build_duration')
+    assert hasattr(repo, 'last_build_started_at')
+    assert hasattr(repo, 'last_build_finished_at')
+    assert hasattr(repo, 'state')
+
+    last_build = repo.last_build
+    assert isinstance(last_build, Build)
+    assert last_build.repository_id == repo.id
+    assert last_build == repo.last_build
+
+    repo.last_build_id = -1
+    with pytest.raises(TravisError) as exception_info:
+        repo.last_build
+    assert str(exception_info.value) == '[404] not found'
+
+
 def test_repo_enable_disable(travis, repo_slug):
     repo = travis.repo(repo_slug)
 
