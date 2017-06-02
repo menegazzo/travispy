@@ -96,5 +96,9 @@
   "user": {
     "login": "travispy",
     "name": "TravisPy"
+  },
+  "settings": {
+    "description": "TravisPy test key",
+    "fingerprint": "99:66:93:03:41:0b:f1:f7:61:83:16:61:fa:47:c0:8f"
   }
 }

@@ -179,3 +179,13 @@ def test_user(travis, test_settings):
 
     # test sync
     assert user.sync()
+
+
+def test_setting(travis, test_settings, repo_slug):
+    expected = test_settings.get('settings')
+    if not expected:
+        pytest.skip('TRAVISPY_TEST_SETTINGS has no "settings" value')
+    repo = travis.repo(repo_slug)
+    setting = travis.settings(repo.id)
+    setting.fingerprint = expected['fingerprint']
+    setting.description = expected['description']

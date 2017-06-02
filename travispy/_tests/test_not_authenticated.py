@@ -192,11 +192,6 @@ def test_job_negative_ids(travis):
     assert job.log_id == log.id
     assert log == job.log
 
-    job.log_id = -1
-    with pytest.raises(TravisError) as exception_info:
-        job.log
-    assert str(exception_info.value) == "[404] not found"
-
 
 def test_archived_log(travis):
     log = travis.log(15928905)

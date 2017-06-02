@@ -9,6 +9,7 @@ from .log import Log
 from .repo import Repo
 from .session import Session
 from .user import User
+from .setting import Setting
 
 
 COMMAND_TO_ENTITY = {
@@ -41,4 +42,7 @@ COMMAND_TO_ENTITY = {
 
     User.many(): User,
     User.one(): User,
+
+    Setting.many(): Setting,
+    Setting.one(): Setting,
 }

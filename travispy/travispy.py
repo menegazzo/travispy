@@ -10,7 +10,7 @@
                  something like ENTERPRISE % {'domain': 'http://travis.example.com'}.
 '''
 from ._helpers import get_response_contents
-from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, Session, User
+from .entities import Account, Branch, Broadcast, Build, Hook, Job, Log, Repo, Session, User, Setting
 import requests
 
 
@@ -278,3 +278,14 @@ class TravisPy:
             This request always needs to be authenticated.
         '''
         return User.find_one(self._session, '')
+
+    def settings(self, repo_id_or_slug, **kwargs):
+        '''
+         :type id_or_slug: int | str
+        :param id_or_slug:
+            ID of slug of repository to obtain information.
+
+        :rtype: :class:`.Setting`
+        '''
+        kwargs['repo_id_or_slug'] = repo_id_or_slug
+        return Setting.find_one(self._session, '', **kwargs)
