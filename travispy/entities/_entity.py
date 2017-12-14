@@ -1,4 +1,4 @@
-from warnings import warn
+import log
 
 from travispy._helpers import get_response_contents
 
@@ -192,8 +192,8 @@ class Entity(object):
                 try:
                     setattr(entity, key, value)
                 except AttributeError:
-                    warn('Unknown {0} attribute {1}'
-                         .format(entity.__class__.__name__, key))
+                    log.debug('Unknown {0} attribute {1}'.format(
+                        entity.__class__.__name__, key))
             result.append(entity)
 
         return result
