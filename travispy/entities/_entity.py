@@ -1,6 +1,8 @@
-import log
+import logging
 
 from travispy._helpers import get_response_contents
+
+log = logging.getLogger(__name__)
 
 
 class Entity(object):
